@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-10-26</div>
+    <div class="sub">AI Agent 工具链霸榜：设计、安全、语音全面开花</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">AI Agent 工具链霸榜：设计、安全、语音全面开花</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>榜单几乎被 Agent 周边工具占据，从设计规范到安全扫描形成配套</li><li>网页审美成为显学：两个设计技能同日上榜，专治模板化 AI 界面</li><li>JetBrains 与 NVIDIA 入场，大厂开始为代理生态补基础设施</li><li>本地优先成共识：语音、桌面工作台都强调数据留在自己机器上</li><li>机器人项目意外突围，Rust 守护进程加强化学习策略驱动小鸭</li></ul>
+<p class="overview">今天的上榜项目几乎都围绕 AI Agent 展开：既有约束前端审美的设计技能、安装前的技能安全扫描，也有把代理装进 IDE 和桌面的工作台，工具链正在从“能跑”走向“可控、好看、可协作”。语言分布上 TypeScript 与 Python 各占三席，Rust 拿下两席并与 JavaScript、CSS 分摊余位，说明代理工具的前端壳、分析后端与高性能运行时各有分工。值得留意的是本地优先与自托管倾向明显，语音合成、代理工作区都主打数据不出本机；唯一的硬件项目 Microduck 则展示了强化学习策略落地的另一种可能。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">1</span><span class="repo-name">Nutlope/hallmark</span><a class="repo-link" href="https://github.com/Nutlope/hallmark">https://github.com/Nutlope/hallmark</a></div><div class="repo-meta">CSS ｜ ★ 34,958 ｜ ⑂ 1,821 ｜ 今日 +1,317</div><div class="repo-desc">拒绝 AI 味的网页设计技能</div><p class="repo-sum">Hallmark 是给 Claude Code、Codex、Cursor 和 OpenCode 用的网页设计技能，目标是让 AI 生成的页面不再一眼看出机器痕迹。它从一组主题材质里抽签定风格，围绕访客真正想完成的事来组织结构，再用 sloplint 在真实浏览器里按多种宽度检查标题小标签、彩色关键词、空框架、假表单等典型套路。项目还提供 redesign 与 audit 两条命令，重做页面时保留原有内容与交互，并可选让全新上下文的评审员做最后把关。安装通过 npx skills add 完成，技能主体以 CSS 为主，采用 MIT 协议。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">3</span><span class="repo-name">JetBrains/thinkrail</span><a class="repo-link" href="https://github.com/JetBrains/thinkrail">https://github.com/JetBrains/thinkrail</a></div><div class="repo-meta">TypeScript ｜ ★ 2,256 ｜ ⑂ 129 ｜ 今日 +51</div><div class="repo-desc">围绕 pi 打造的智能体 IDE</div><p class="repo-sum">ThinkRail 是 JetBrains 推出的智能体 IDE，把 pi 编码代理包进一套完整的桌面开发环境。它从仓库切出独立的 git worktree 作为工作区，让多个代理并行干活而不碰你的主检出，并集成了 Monaco 编辑器、文件树、终端、变更视图与差异批注。对话支持同一工作区里多个并行会话、不同模型与费用读数，计划中的每一步可单独提交与评审；代理还能通过 SPEC.md 图谱维护长期项目知识，并复用现有 Agent Skills 与 MCP 服务器。凭据走 JetBrains AI 或 pi 自身的登录，提供桌面安装包和可在浏览器打开的 CLI，内置英文与简体中文界面。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">4</span><span class="repo-name">makecindy/cindy</span><a class="repo-link" href="https://github.com/makecindy/cindy">https://github.com/makecindy/cindy</a></div><div class="repo-meta">TypeScript ｜ ★ 5,634 ｜ ⑂ 723 ｜ 今日 +675</div><div class="repo-desc">开箱即用的多模型 AI Agent</div><p class="repo-sum">Cindy 是开源的通用 AI Agent 客户端，主张装好就能在自己电脑上处理真实工作。它把多种 harness、模型和工具汇到一个代理里，首批支持 Claude Code 与 Codex，任务中途可切换模型或 harness 而工作区、记忆、技能保持连续，甚至能让不同组合的代理分工规划、并行执行与复核。她能操作浏览器、电脑和手机，并从即时通讯与定时任务接收工作，记忆、技能、自动化、MCP 与插件都可自行调整。仓库是 pnpm monorepo 形式的开源客户端，包含 Electron 桌面端与 Expo 移动端，后端服务在另一个仓库，采用 Apache-2.0 协议。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">5</span><span class="repo-name">affaan-m/ECC</span><a class="repo-link" href="https://github.com/affaan-m/ECC">https://github.com/affaan-m/ECC</a></div><div class="repo-meta">JavaScript ｜ ★ 289,194 ｜ ⑂ 42,859 ｜ 今日 +853</div><div class="repo-desc">给编码 Agent 装上工程化系统</div><p class="repo-sum">ECC 是一套面向编码代理的性能与流程优化系统，把“先计划、再测试、实现、评审、验证、记忆、改进”的工程习惯固化下来，而不是在每个提示里重复交代。它提供大量专用代理、技能与旧命令兼容层，并配有 hooks、规则、持久记忆、持续学习与 AgentShield 安全扫描，让代理在动手前规划、用测试验证改动、以全新上下文复查自己的产出。当前对 Claude Code 支持最完整，另有 Codex 与 Qoder 的原生插件路径，并通过能力受限的适配层接入 Cursor、OpenCode、Gemini、Zed、GitHub Copilot 等环境。项目以 JavaScript 为主，MIT 协议开源，同时提供 npm 包与 GitHub App。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">6</span><span class="repo-name">pbakaus/impeccable</span><a class="repo-link" href="https://github.com/pbakaus/impeccable">https://github.com/pbakaus/impeccable</a></div><div class="repo-meta">Rust ｜ ★ 88,393 ｜ ⑂ 5,277 ｜ 今日 +1,092</div><div class="repo-desc">提升 AI 前端设计的规则集</div><p class="repo-sum">Impeccable 是一套给 AI 编码代理用的设计语言与技能，专门对付各家模型产出雷同的模板化界面。它用一个 init 流程把产品受众、目的、语气等长期事实写进 PRODUCT.md，再通过一整套共享设计词汇的命令覆盖打磨、审计、批评、提炼、动效、排版、布局与适配等环节。技能自带确定性检测规则和浏览器扩展，可在不调用大模型、不需要 API Key 的情况下抓出渐变滥用、卡片套卡片、灰字压彩色背景等毛病，并支持在真实浏览器里逐个元素迭代。安装可用 npx、Git 子模块或插件方式，适配 Cursor、Claude Code、Gemini CLI、Codex 等多种工具，安装器与引擎以 Rust 实现。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">7</span><span class="repo-name">NVIDIA/SkillSpector</span><a class="repo-link" href="https://github.com/NVIDIA/SkillSpector">https://github.com/NVIDIA/SkillSpector</a></div><div class="repo-meta">Python ｜ ★ 21,678 ｜ ⑂ 1,911 ｜ 今日 +203</div><div class="repo-desc">装技能前先做安全体检</div><p class="repo-sum">SkillSpector 是 NVIDIA 推出的 AI Agent 技能安全扫描器，回答“这个技能能不能放心装”这个问题。它支持扫描 Git 仓库、网址、压缩包、目录或单个文件，用静态分析加可选的 LLM 语义评估识别提示注入、数据外泄、权限提升、供应链风险、过度自主、MCP 工具投毒等类别的问题，并给出风险评分与处置建议。输出可选终端、JSON、Markdown 与 SARIF，便于接入 CI 与 IDE，还支持批量扫描、误报基线与实时漏洞库查询；它是 NVIDIA Verified Skills 流水线的一环，也提供 Pi 与 OpenCode 扩展。项目以 Python 编写，可用 uv 安装或直接用 Docker 运行。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">8</span><span class="repo-name">pollen-robotics/microduck</span><a class="repo-link" href="https://github.com/pollen-robotics/microduck">https://github.com/pollen-robotics/microduck</a></div><div class="repo-meta">Rust ｜ ★ 12,086 ｜ ⑂ 1,519 ｜ 今日 +647</div><div class="repo-desc">会走会翻滚的双足机器鸭</div><p class="repo-sum">Microduck 是 Pollen Robotics 开源的迷你双足机器鸭，这个仓库装的是它的“大脑”。整机由一块 Rockchip 芯片上的一组守护进程驱动：控制循环以固定频率带动全身舵机执行神经网络策略，同时管理无线、摄像头、深度传感器与可回滚的签名固件更新。它能用游戏手柄操控行走、装上轮子切换滚动模式、低头叼起东西，被推倒后还能自己站起来。代码以 Rust 写成单 workspace，各守护进程通过 Unix socket 上的统一 JSON-RPC 契约通信；运动策略在配套仓库用 MuJoCo 与 PPO 训练后导出 ONNX，并提供在模拟环境中调试整机的方案。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">9</span><span class="repo-name">nightly-labs/openbot</span><a class="repo-link" href="https://github.com/nightly-labs/openbot">https://github.com/nightly-labs/openbot</a></div><div class="repo-meta">TypeScript ｜ ★ 1,048 ｜ ⑂ 162 ｜ 今日 +86</div><div class="repo-desc">本地优先的多智能体工作台</div><p class="repo-sum">OpenBot 是一个本地优先的桌面工作台，用来养一支长期在线的 AI 团队。每个代理都有独立的工作区与会话，底层可接 Codex、Claude Code、Grok CLI、OpenCode、Gemini、Cursor CLI 与 Cline，支持自定义 OpenAI 兼容端点，并会自动发现本地模型服务。它提供可暂停取消的消息队列、文件互传、常驻内嵌浏览器、代理之间的消息与委派、共享频道协作，以及可选的电脑操作能力，并对上下文用量做监控与压缩。项目目前是开发预览版，代理默认拥有完全访问权限，安装覆盖 macOS、Windows、Linux AppImage，也支持 Docker、Nix 与无界面服务器自托管。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">10</span><span class="repo-name">Panniantong/Agent-Reach</span><a class="repo-link" href="https://github.com/Panniantong/Agent-Reach">https://github.com/Panniantong/Agent-Reach</a></div><div class="repo-meta">Python ｜ ★ 102,829 ｜ ⑂ 9,126 ｜ 今日 +723</div><div class="repo-desc">一个 CLI 打通全网内容读取</div><p class="repo-sum">Agent Reach 想让 CLI 代理够到它平时上不去的互联网：需要登录的平台、视频里的字幕与转写、中文社区，以及整理干净的结构化数据。它把 B 站、V2EX、GitHub、YouTube、网页设为默认渠道，小红书、雪球、BOSS、领英、Reddit 等按需开启，用一条命令按渠道和动作取内容，也能直接丢链接自动选路。每个动作背后是一串有序的备选工具，首选失败就自动换下一个，平台改版时只需调整列表。设计上坚持只读，不代你登录也不要密码，复用登录时只复制单个站点且不改动原浏览器；项目以 Python 编写，采用 MIT 协议。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">11</span><span class="repo-name">debpalash/VoiceStudio</span><a class="repo-link" href="https://github.com/debpalash/VoiceStudio">https://github.com/debpalash/VoiceStudio</a></div><div class="repo-meta">Python ｜ ★ 87,824 ｜ ⑂ 9,683 ｜ 今日 +1,592</div><div class="repo-desc">本地运行的语音克隆工作室</div><p class="repo-sum">VoiceStudio 是开源的本地语音工作台，定位是 ElevenLabs 的自托管替代品。它把声音克隆、按描述设计音色、视频配音、听写、转写与有声书制作放进同一个应用，默认引擎为 OmniVoice，也可切换其他引擎，本地流程全部跑在自己的硬件上，远程服务只是可选项。除桌面界面外，它还提供本地 API 与 MCP 接口供代理调用，并支持可复用配方与监听文件夹的批处理。安装包覆盖 macOS、Windows 与 Linux，可按 NVIDIA、Apple Silicon 或纯 CPU 选择加速方式，采用 AGPL-3.0 协议。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
