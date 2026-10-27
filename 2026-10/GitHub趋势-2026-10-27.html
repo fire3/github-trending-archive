@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-10-27</div>
+    <div class="sub">AI 代理工具链霸榜：设计、安全、记忆与语音齐发</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">AI 代理工具链霸榜：设计、安全、记忆与语音齐发</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>十个项目里七个围绕 AI 编码代理，代理正从代码补全走向完整工程闭环</li><li>TypeScript 与 Python 各占三席、Rust 两席，桌面端与本地优先成为共同选择</li><li>反模板化设计成新赛道，hallmark 与 impeccable 同日上榜</li><li>安全与记忆补短板：SkillSpector 扫描技能，ECC 沉淀可复用流程</li><li>唯一硬件项目 microduck 用强化学习策略让机器鸭行走、起身与打滚</li></ul>
+<p class="overview">今天的榜单几乎被 AI 代理生态包场：从设计规范、技能安全、流程编排到常驻桌面工作区，再到给代理补互联网能力的采集工具，覆盖了代理落地时最缺的几块拼图。语言分布上 TypeScript 与 Python 各三席，前者集中在 IDE 与桌面客户端，后者偏向安全扫描、数据获取与语音，Rust 则出现在 IDE 与机器人两个偏底层的项目里。值得注意的是“反 AI 味”与“本地优先”两条暗线同时出现，说明社区已从能不能用转向用得是否可信、是否像人做的。榜单里唯一的非软件项目 microduck 也提醒我们，强化学习正在走出仿真进入消费级硬件。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">1</span><span class="repo-name">Nutlope/hallmark</span><a class="repo-link" href="https://github.com/Nutlope/hallmark">https://github.com/Nutlope/hallmark</a></div><div class="repo-meta">CSS ｜ ★ 37,753 ｜ ⑂ 1,968 ｜ 今日 +2,244</div><div class="repo-desc">给 AI 编码工具的反模板化设计技能</div><p class="repo-sum">Hallmark 是面向 Claude Code、Codex、Cursor、OpenCode 的设计技能，目标是让 AI 生成的网页不再一眼就像套模板。它从 48 套主题材质中抽取三套，围绕访客真正要做的事来组织页面，并在真实浏览器里按“机器味”特征做检查，例如每个标题上方的小标签、每页结尾必有的邮件订阅框、只放空框或只放照片的页面。检查分三层：底线项永不妥协（对比度、焦点、减少动效、手机布局），常见的模型反射式做法可带理由覆写，工艺细节不阻塞发布。它还能指向 URL、开发服务器或应用自行截图，内置 755 张开放授权照片，并提供 redesign 与 audit 两条命令。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">3</span><span class="repo-name">JetBrains/thinkrail</span><a class="repo-link" href="https://github.com/JetBrains/thinkrail">https://github.com/JetBrains/thinkrail</a></div><div class="repo-meta">TypeScript ｜ ★ 3,443 ｜ ⑂ 183 ｜ 今日 +1,173</div><div class="repo-desc">JetBrains的智能编码IDE</div><p class="repo-sum">ThinkRail 是 JetBrains 推出的 agentic IDE，把 pi 编码代理包进一个完整的桌面工作台。它用 git worktree 把任务切成隔离工作区，每个工作区有自己的分支与目录，代理可以并行改代码而不碰你的检出内容，好分支合并、其余删除；顶栏显示当前分支相对 origin 与 PR 的状态，可直接发布、推送、开 PR，也能查看 CI 检查与评审结论并把失败项交回代理。编辑器侧提供 Monaco 多标签、带 git 变更标记的文件树、终端与文档，还支持在文件或 diff 上留锚定评论并作为结构化上下文发给聊天。代理的项目知识由互相连接的 SPEC.md 规格图谱维护，后续会加入扩展机制，让 IDE 按使用习惯自造工具；TypeScript 实现。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">4</span><span class="repo-name">makecindy/cindy</span><a class="repo-link" href="https://github.com/makecindy/cindy">https://github.com/makecindy/cindy</a></div><div class="repo-meta">TypeScript ｜ ★ 7,077 ｜ ⑂ 849 ｜ 今日 +1,296</div><div class="repo-desc">开箱即用的开源 AI Agent</div><p class="repo-sum">Cindy 是开源 AI Agent 客户端，主打开箱即用：把多种 harness、模型与工具收进同一个代理，直接在你本机的真实文件和已登录应用上完成工作。首批支持 Claude Code 与 Codex，模型和 harness 可以混用并在任务中途切换，而工作区、记忆、技能与工具保持连续，一个任务甚至能由不同 harness 与模型组合的代理分工规划、并行执行和复核。它能驱动浏览器、电脑与手机，也能从即时消息和定时任务接收工作。仓库是 Apache-2.0 的客户端源码，采用 pnpm monorepo，包含 Electron 桌面端与 Expo/React Native 移动端；可以用官方服务、已有的 Claude Code 或 Codex 订阅、自备 API Key，或本地模型。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">5</span><span class="repo-name">affaan-m/ECC</span><a class="repo-link" href="https://github.com/affaan-m/ECC">https://github.com/affaan-m/ECC</a></div><div class="repo-meta">JavaScript ｜ ★ 290,289 ｜ ⑂ 43,012 ｜ 今日 +896</div><div class="repo-desc">给编码代理的工程化流程与技能库</div><p class="repo-sum">ECC 是一套代理 harness 性能优化系统，把先规划、再测试、实现、复核、验证、记忆、改进的工程闭环装进编码代理，不必在每个提示词里重复交代这套流程。它提供 71 个专用代理、311 个技能和 97 个旧命令兼容层，再加上 hooks、规则、记忆、持续学习与 AgentShield 安全扫描，核心理念是优化上下文窗口、把其余信息持久化保存。项目采用 MIT 协议，目前对 Claude Code 支持最好，另有 Codex 与 Qoder 的原生插件路径，并为 Cursor、OpenCode、Gemini、Zed、GitHub Copilot、Qwen 等提供能力受限的适配层，README 明确提醒各平台功能并不完全对齐。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">6</span><span class="repo-name">pbakaus/impeccable</span><a class="repo-link" href="https://github.com/pbakaus/impeccable">https://github.com/pbakaus/impeccable</a></div><div class="repo-meta">Rust ｜ ★ 89,795 ｜ ⑂ 5,337 ｜ 今日 +1,506</div><div class="repo-desc">让 AI 前端不再千篇一律的设计规范</div><p class="repo-sum">Impeccable 是给 AI 编码代理的设计指导层，由 1 个技能、24 条命令、浏览器内实时迭代和 62 条确定性检测规则组成。它的出发点是所有模型都训练自同一批 SaaS 模板，缺少约束时就会反复出现 Inter 字体、紫蓝渐变、卡片套卡片、彩色底上的灰字等痕迹。它用 /impeccable init 把受众、目标、约束与语气等产品事实写进 PRODUCT.md，再通过 craft、critique、audit、polish、distill、animate、typeset 等命令建立一套可复用的设计词汇。检测规则由 CLI 和浏览器扩展在无 LLM、无 API Key 的情况下运行，安装只需 npx impeccable install；仓库以 Rust 为主。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">7</span><span class="repo-name">NVIDIA/SkillSpector</span><a class="repo-link" href="https://github.com/NVIDIA/SkillSpector">https://github.com/NVIDIA/SkillSpector</a></div><div class="repo-meta">Python ｜ ★ 22,619 ｜ ⑂ 1,963 ｜ 今日 +214</div><div class="repo-desc">安装前先体检的 AI 技能安全扫描器</div><p class="repo-sum">SkillSpector 是 NVIDIA 推出的 AI Agent 技能安全扫描器，专门回答“这个技能能不能装”。它支持 Git 仓库、URL、zip、目录和单文件输入，内置 17 个类别共 71 条漏洞模式，覆盖提示注入、数据外泄、权限提升、供应链风险、过度自主、MCP 工具投毒等，并采用快速静态分析加可选 LLM 语义评估的两段式流程。工具会给出 0 到 100 的风险评分与处置建议，输出终端、JSON、Markdown 和 SARIF 报告，支持用基线抑制已知误报，还会向 OSV.dev 查询实时 CVE 并在离线时降级。它是 NVIDIA Verified Skills 流水线的一环，通过扫描的技能才会进入官方目录；Python 实现，可用 uv 或 pip 安装，也提供 Docker 镜像以及 Pi、OpenCode 扩展。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">8</span><span class="repo-name">pollen-robotics/microduck</span><a class="repo-link" href="https://github.com/pollen-robotics/microduck">https://github.com/pollen-robotics/microduck</a></div><div class="repo-meta">Rust ｜ ★ 12,677 ｜ ⑂ 1,567 ｜ 今日 +843</div><div class="repo-desc">会走路打滚的强化学习双足机器鸭</div><p class="repo-sum">Microduck 是一只约 25 厘米、800 克的微型双足机器人，这个仓库就是它的“大脑”。代码运行在 Rockchip RK3566 上，一组守护进程以 50 Hz 控制循环驱动 15 个舵机执行神经网络策略，同时管理无线、摄像头，以及可验证、可回滚、带健康检查的升级机制。它能走路、装上轮子切换到滚动模式、低头叼起东西、被推倒后自己站起来，也会坐下、踢球和嘎嘎叫。策略在配套的 microduck_rl 仓库中用 MuJoCo 与 PPO 训练，再导出为 ONNX 供本仓库加载；Rust 实现，并提供在 MuJoCo 里运行真实守护进程的仿真方案，方便没有硬件时开发。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">9</span><span class="repo-name">nightly-labs/openbot</span><a class="repo-link" href="https://github.com/nightly-labs/openbot">https://github.com/nightly-labs/openbot</a></div><div class="repo-meta">TypeScript ｜ ★ 1,821 ｜ ⑂ 212 ｜ 今日 +176</div><div class="repo-desc">为常驻 AI 队友准备的本地桌面工作台</div><p class="repo-sum">OpenBot 是一个本地优先的桌面工作区，让多个 AI 代理像团队成员一样长期驻留。每个代理拥有独立的工作区、会话、指令与头像，可接入 Codex App Server、Claude Code、Grok、OpenCode、Gemini、Cursor 和 Cline，也支持自定义 OpenAI 兼容端点和自定义 ACP 代理，并会自动探测 Ollama、LM Studio 等本地模型服务。它提供先进先出的消息队列与暂停、恢复、取消，代理之间的消息、回复、表情和文件传输，带明确委派关系的共享频道，以及可被代理打开和操控的内嵌浏览器。项目仍处于开发预览阶段，代理默认以完全访问权限运行且不再逐动作确认；TypeScript 编写，提供 macOS、Windows 与 Linux 安装包。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">10</span><span class="repo-name">Panniantong/Agent-Reach</span><a class="repo-link" href="https://github.com/Panniantong/Agent-Reach">https://github.com/Panniantong/Agent-Reach</a></div><div class="repo-meta">Python ｜ ★ 104,426 ｜ ⑂ 9,255 ｜ 今日 +746</div><div class="repo-desc">一条命令补上 Agent 够不着的平台</div><p class="repo-sum">Agent Reach 是给 CLI Agent 补充互联网能力的工具集，一条安装指令交给代理执行即可，之后就能读取自带搜索够不着的内容：登录后才开放的平台功能、视频字幕与播客转写、中文社区，以及整理好的行情和帖子数据。目前默认开通 B 站、V2EX、GitHub、YouTube 与通用网页，另可选装小红书、雪球、求职站、LinkedIn、Reddit、X 等渠道。它把每个平台的每个动作定义成一串按顺序尝试的工具，首选失败会自动切到备选，所有渠道装在 ~/.agent-reach/ 下，升级和卸载都只需一句话。设计上坚持只读、不代替用户登录、不索取密码，需要登录的平台使用独立浏览器并复用本机已有的登录态；Python 编写。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">11</span><span class="repo-name">debpalash/VoiceStudio</span><a class="repo-link" href="https://github.com/debpalash/VoiceStudio">https://github.com/debpalash/VoiceStudio</a></div><div class="repo-meta">Python ｜ ★ 90,399 ｜ ⑂ 9,959 ｜ 今日 +2,297</div><div class="repo-desc">完全本地的开源语音克隆工作台</div><p class="repo-sum">VoiceStudio 是本地运行的开源语音工作台，定位为 ElevenLabs 的替代方案，功能覆盖声音克隆、声音设计、视频配音、听写、转写和有声书制作，宣称支持 646 种语言。它默认使用基于 k2-fsa/OmniVoice 的引擎，也可以切换其他引擎，模型在用户自己的硬件上运行，远程服务只是可选项，且分析数据需要用户同意。桌面端提供克隆、配音、声音设计与本地模型管理界面，另有浮动听写组件、批量任务、可复用配方、监听文件夹，以及给代理调用的本地 API 与 MCP 接口。macOS 与 Linux 可用一行脚本安装，Windows 使用 PowerShell 脚本；项目以 AGPL-3.0 发布，Python 实现。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
