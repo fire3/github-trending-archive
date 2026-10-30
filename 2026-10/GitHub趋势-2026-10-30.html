@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-10-30</div>
+    <div class="sub">今日榜单：Agent 记忆、技能生态与 AI 同事同台</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">今日榜单：Agent 记忆、技能生态与 AI 同事同台</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>榜单过半项目围绕 Agent 工具链：记忆、技能、控制台与运行环境</li><li>“AI 同事”形态升温，独立浏览器与虚拟机成为常见配置</li><li>Skills 生态集中上榜：Expo、Anthropic 与个人工程技能并存</li><li>TypeScript 占 4 席，Shell 与 Python 各 2 席，Rust 1 席</li><li>学习辅导与提示词安全研究同榜，应用面继续外扩</li></ul>
+<p class="overview">今天的榜单几乎被 Agent 基础设施包场：从跨会话记忆、技能包，到能操控本机 Agent 的跨端控制台，再到自带电脑的开源 AI 同事，开发者正在补齐 Agent 从“能跑”到“好用、可管、可审计”的各层拼图。语言分布上 TypeScript 依旧主导交互与平台层，Python 承担学习与研究类应用，Rust 出现在追求性能的一体化工作台，Shell 则多用于技能分发。值得注意的方向是技能（Skills）正成为新的分发单位，同时提示词安全研究也进入主流视野。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">1</span><span class="repo-name">thedotmack/claude-mem</span><a class="repo-link" href="https://github.com/thedotmack/claude-mem">https://github.com/thedotmack/claude-mem</a></div><div class="repo-meta">TypeScript ｜ ★ 105,266 ｜ ⑂ 9,277 ｜ 今日 +336</div><div class="repo-desc">跨会话持久记忆压缩系统</div><p class="repo-sum">面向 Claude Code 等编码 Agent 的持久记忆插件：自动捕获会话中 Agent 的工具调用观察，用 AI 压缩成语义摘要，再把相关上下文注入后续会话，让项目知识在会话结束或重连后仍然延续。项目以 TypeScript 实现，一条 npx 命令即可安装，可接入 Claude Code、Codex、OpenCode、Grok Bot 等多种 IDE 与 CLI，并允许选择托管记忆服务或自备 OpenRouter、Gemini、Anthropic 凭据。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">2</span><span class="repo-name">milind-soni/OpenMausBot</span><a class="repo-link" href="https://github.com/milind-soni/OpenMausBot">https://github.com/milind-soni/OpenMausBot</a></div><div class="repo-meta">TypeScript ｜ ★ 7,881 ｜ ⑂ 1,148 ｜ 今日 +1,199</div><div class="repo-desc">聊天式 AI 机器人团队，本地优先</div><p class="repo-sum">开源的“AI 机器人聊天应用”：侧栏里每个机器人都对应本机运行的真实 Agent，拥有独立人格、模型、云电脑和已连接应用，可以像联系人一样对话、旁观其工作并审批关键操作。它强调自带 Agent 与本地优先，由跑在 127.0.0.1 的小型 harness 服务管理所有 Agent 进程，会话记录和密钥存放在本地目录，并支持接入数百款应用与多平台安装包。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">4</span><span class="repo-name">CopilotKit/OpenBot</span><a class="repo-link" href="https://github.com/CopilotKit/OpenBot">https://github.com/CopilotKit/OpenBot</a></div><div class="repo-meta">TypeScript ｜ ★ 8,436 ｜ ⑂ 1,070 ｜ 今日 +247</div><div class="repo-desc">可自托管的开源 AI 同事平台</div><p class="repo-sum">CopilotKit 推出的开源 AI 同事模板：每位同事拥有独立浏览器、文件空间和仅限授权的工具，每个动作执行前先做决策、执行后留下记录。它通过 AG-UI 协议接入任意框架或手写的 Agent，用 Docker Compose 拉起整套服务，数据存放在自建 PostgreSQL，模型凭据由管理员提供并加密保存。定位是可克隆改造的模板而非托管产品，适合想把助手放进自有基础设施的团队。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">6</span><span class="repo-name">expo/skills</span><a class="repo-link" href="https://github.com/expo/skills">https://github.com/expo/skills</a></div><div class="repo-meta">Shell ｜ ★ 3,773 ｜ ⑂ 241 ｜ 今日 +233</div><div class="repo-desc">Expo 官方 AI Agent 技能集</div><p class="repo-sum">Expo 团队发布的官方 Agent Skills 合集，为构建、部署、升级和调试 Expo 应用提供聚焦的领域知识，说明何时使用 Expo API、如何组织常见工作流，以及 Expo、EAS、React Native、iOS 与 Android 的关键约束。Claude Code 与 Codex 可通过官方插件市场安装并自动更新，Cursor、OpenCode、Copilot 等则用 skills CLI 一条命令装入；README 还交代了更新方式和免费与付费技能的分组边界。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">7</span><span class="repo-name">macro-inc/macro</span><a class="repo-link" href="https://github.com/macro-inc/macro">https://github.com/macro-inc/macro</a></div><div class="repo-meta">Rust ｜ ★ 5,677 ｜ ⑂ 535 ｜ 今日 +379</div><div class="repo-desc">一体化团队工作台，共享 AI 记忆</div><p class="repo-sum">把邮件、消息、文档、任务、Agent、通话和 CRM 收进同一界面的团队工作台，所有内容以 @ 链接彼此关联并可搜索，团队与 Agent 共享同一份记忆。各模块共用后端，文档与任务、频道消息与邮件之间的交叉引用以双向图原生存储，文档支持基于 CRDT 的实时协作，通话可录制转写并写入团队记忆。项目用 SolidJS 与 Rust 构建，目标是让中小团队用一套系统替代多款割裂工具的拼接。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">8</span><span class="repo-name">mattpocock/skills</span><a class="repo-link" href="https://github.com/mattpocock/skills">https://github.com/mattpocock/skills</a></div><div class="repo-meta">Shell ｜ ★ 306,974 ｜ ⑂ 25,824 ｜ 今日 +882</div><div class="repo-desc">实战派工程师 Agent 技能集</div><p class="repo-sum">作者日常使用的 Agent 技能合集，主张用它做真正的工程而不是 vibe coding；技能保持小而可组合、容易改写，并且不绑定特定模型。相比 GSD、BMAD、Spec-Kit 这类接管流程的方案，它把控制权留在开发者手里，流程出问题时更容易定位。仓库给出 Claude Code、Codex、GitHub Copilot、Gemini CLI 以及通用 skills CLI 的安装方式，并附带一次性的 setup 技能来配置 issue tracker、triage 标签和文档存放位置。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">9</span><span class="repo-name">pingdotgg/t3code</span><a class="repo-link" href="https://github.com/pingdotgg/t3code">https://github.com/pingdotgg/t3code</a></div><div class="repo-meta">TypeScript ｜ ★ 32,234 ｜ ⑂ 8,553 ｜ 今日 +920</div><div class="repo-desc">跨端 Agent 控制台，手机也能管</div><p class="repo-sum">自称“Agent harness 控制面”，用 iOS、Android 移动端、Web 应用和 Electron 桌面端统一操控本机上的编码 Agent。它复用你已有的订阅，支持 Claude Code、Codex、Cursor、Grok Build、OpenCode 与 Google Antigravity，只要本机安装并登录即可接管。安装可选命令行（t3 启动本地服务，t3 service install 后台常驻）或各平台包管理器与 GitHub Releases，项目强调性能、远程可用以及随时可 fork 的开放性。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">10</span><span class="repo-name">HKUDS/DeepTutor</span><a class="repo-link" href="https://github.com/HKUDS/DeepTutor">https://github.com/HKUDS/DeepTutor</a></div><div class="repo-meta">Python ｜ ★ 51,202 ｜ ⑂ 6,284 ｜ 今日 +1,930</div><div class="repo-desc">终身个性化 AI 学习伙伴</div><p class="repo-sum">HKUDS 团队打造的个性化学习系统，围绕知识库、阅读、练习与测评组织长期学习过程，近期版本加入模块化安装、学习工作区、可续传的嵌入索引和带旁白的视频课程等能力。它提供学习路径、任务板、学习日志与多种模型供应商接入，目标用户是希望让 AI 长期跟踪自身学习进度并给出针对性辅导的个人学习者。项目以 Python 实现，版本迭代相当频繁。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">11</span><span class="repo-name">anthropics/skills</span><a class="repo-link" href="https://github.com/anthropics/skills">https://github.com/anthropics/skills</a></div><div class="repo-meta">Python ｜ ★ 184,918 ｜ ⑂ 21,867 ｜ 今日 +287</div><div class="repo-desc">Anthropic 官方技能示例库</div><p class="repo-sum">Anthropic 公开的 Agent Skills 仓库，用来展示 Claude 技能系统的可能性：每个技能是独立文件夹，内含 SKILL.md 指令与元数据、脚本和资源，覆盖创意设计、开发技术、企业沟通与文档处理等场景。仓库同时提供 Agent Skills 规范与技能模板，并公开 docx、pdf、pptx、xlsx 等支撑 Claude 文档能力的技能作为复杂参考（这部分为 source-available）。多数技能以 Apache 2.0 开源，官方说明其用途是演示与学习，用于关键任务前需自行充分测试。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">13</span><span class="repo-name">togg53192-cmd/jailbreaks</span><a class="repo-link" href="https://github.com/togg53192-cmd/jailbreaks">https://github.com/togg53192-cmd/jailbreaks</a></div><div class="repo-meta">★ 9,875 ｜ ⑂ 1,389 ｜ 今日 +1,594</div><div class="repo-desc">多模型越狱提示词合集</div><p class="repo-sum">一份系统提示词、人格锁定、工作区策略和 AGENTS.md 等指令文件的合集，共 32 份提示词、覆盖 26 个以上模型，每份都力求完整、可直接粘贴使用，另含 Ollama Modelfiles 与特定 harness 的配置。内容覆盖 OpenCode Zen 的免费隐身模型、GLM、DeepSeek、Kimi、Qwen、Gemma、GPT-OSS 等开放权重家族，以及 Claude、Gemini、Grok、Mistral 等闭源模型。作者声明仅供研究与教育，用于理解指令层级、人格设定和策略覆盖如何影响模型行为，也可辅助提示注入防御研究。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
