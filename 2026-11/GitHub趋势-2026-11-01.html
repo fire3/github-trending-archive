@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-11-01</div>
+    <div class="sub">AI 代理生态全面霸榜：记忆、控制台与安全运营齐飞</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">AI 代理生态全面霸榜：记忆、控制台与安全运营齐飞</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>十个上榜项目中六个直接服务于 AI 代理工作流</li><li>代理记忆与多端控制台成为新赛道，claude-mem 与 T3 Code 领跑</li><li>Zig 重写浏览器 Lightpanda 以更轻更快切入自动化抓取</li><li>金融 K 线与几何视觉仍是传统 ML 主线，Kronos、Kornia 在列</li><li>语言分布：Python 3 个、TypeScript 2 个，Rust、Zig、Shell 各 1</li></ul>
+<p class="overview">今天的榜单几乎被 AI 代理基础设施占满：既有让代理跨会话记住项目的记忆层，也有统一遥控本机多个编码代理的应用端，还有把代理编排成团队或工作室的模板方案。语言分布上 Python 与 TypeScript 仍是主力，Rust 与 Zig 则分别出现在离线语音与浏览器这类追求性能与体积的底层项目里。安全运营方向也出现了把大模型接入检测与响应、并强调决策可审计的开源 SOC，说明代理正在从编码助手扩散到运维与安全场景。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">1</span><span class="repo-name">thedotmack/claude-mem</span><a class="repo-link" href="https://github.com/thedotmack/claude-mem">https://github.com/thedotmack/claude-mem</a></div><div class="repo-meta">TypeScript ｜ ★ 108,415 ｜ ⑂ 9,509 ｜ 今日 +1,723</div><div class="repo-desc">给编码代理装上持久记忆</div><p class="repo-sum">面向 AI 编码代理的持久上下文压缩系统，最初为 Claude Code 打造。它在会话中自动记录代理的工具调用与观察结果，用 AI 压缩成语义摘要，并在之后的会话里按相关性重新注入，让代理跨会话保持对项目的记忆。项目以 TypeScript 实现，通过 npx 一条命令即可安装，官方还提供 Codex、Gemini、Copilot、OpenCode、Pi 等多种 harness 的接入方式。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">2</span><span class="repo-name">lightpanda-io/browser</span><a class="repo-link" href="https://github.com/lightpanda-io/browser">https://github.com/lightpanda-io/browser</a></div><div class="repo-meta">Zig ｜ ★ 39,560 ｜ ⑂ 1,932 ｜ 今日 +929</div><div class="repo-desc">为 AI 智能体打造的无头浏览器</div><p class="repo-sum">用 Zig 从零编写的无头浏览器，并非 Chromium 或 WebKit 的分支，专为 AI 代理与自动化场景设计。按项目自述的基准，抓取 100 个页面时内存约为无头 Chrome 的十六分之一，速度快约九倍。它支持 CDP 与 WebDriver BiDi 协议，可直接接入 Puppeteer 等现有客户端，也提供 fetch 导出 HTML、Markdown、PNG 或 PDF，内置 agent 模式与可回放的 PandaScript 脚本，并有 Docker 镜像及 Homebrew、Nix 等安装方式。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">3</span><span class="repo-name">shiyu-coder/Kronos</span><a class="repo-link" href="https://github.com/shiyu-coder/Kronos">https://github.com/shiyu-coder/Kronos</a></div><div class="repo-meta">Python ｜ ★ 44,898 ｜ ⑂ 7,421 ｜ 今日 +611</div><div class="repo-desc">金融 K 线的基础模型</div><p class="repo-sum">面向金融市场 K 线序列的开源基础模型家族，采用仅解码器的 Transformer 架构。它先用专用 tokenizer 把 OHLCV 多维连续行情量化成层级离散 token，再在大规模数据上自回归预训练，从而统一支持预测等多种量化任务；按 README 说明，训练数据来自 45 个以上全球交易所。项目以 Python 实现、权重托管在 Hugging Face，提供 mini 到 base 等不同规模模型与 KronosPredictor 接口，支持批量预测与温度、top-p 采样，论文已被 AAAI 2026 接收。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">4</span><span class="repo-name">pingdotgg/t3code</span><a class="repo-link" href="https://github.com/pingdotgg/t3code">https://github.com/pingdotgg/t3code</a></div><div class="repo-meta">TypeScript ｜ ★ 36,428 ｜ ⑂ 8,842 ｜ 今日 +1,148</div><div class="repo-desc">统一遥控本机 AI 代理的控制台</div><p class="repo-sum">T3 Code 是一个代理 harness 控制面，用 iOS、Android 移动端、Web 应用和 Electron 桌面端来远程操控本机已安装的编码代理。它复用你已有的订阅，支持 Claude Code、Codex、Cursor、Grok Build、OpenCode、Google Antigravity 与 fx，只要这些工具在本机完成登录即可纳管。项目以 TypeScript 开发，可通过安装脚本、npx、桌面安装包或 Homebrew、AUR、Nix 等渠道获取，并提供远程访问、权限模式与 MCP 接入等文档。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">5</span><span class="repo-name">milind-soni/OpenMausBot</span><a class="repo-link" href="https://github.com/milind-soni/OpenMausBot">https://github.com/milind-soni/OpenMausBot</a></div><div class="repo-meta">TypeScript ｜ ★ 10,065 ｜ ⑂ 1,394 ｜ 今日 +1,303</div><div class="repo-desc">把 AI 代理做成聊天软件里的团队</div><p class="repo-sum">开源的 AI 代理聊天应用，对标 Grok Bot 一类产品：侧边栏里每个 bot 都是运行在本机 claude、codex 或 grok 命令行上的代理，拥有独立人格、模型、云端电脑与已连接的应用。它走本地优先路线，由一个跑在 127.0.0.1 的轻量 harness 服务掌管所有代理进程，对话与密钥留在本地目录；权限代理会把 Shell 命令与文件修改变成你逐条批准的卡片。项目以 TypeScript 编写、Apache 2.0 协议，提供 macOS、Windows、Ubuntu 安装包，并支持 Composio 数百个应用的一键接入与按频道组织协作。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">6</span><span class="repo-name">public-apis/public-apis</span><a class="repo-link" href="https://github.com/public-apis/public-apis">https://github.com/public-apis/public-apis</a></div><div class="repo-meta">Python ｜ ★ 493,936 ｜ ⑂ 55,147 ｜ 今日 +298</div><div class="repo-desc">社区维护的免费公共 API 大全</div><p class="repo-sum">由社区成员与 APILayer 团队共同人工整理的免费公共 API 清单，长期是开发者寻找接口数据源的首选索引。仓库按领域分类收录大量可直接调用的公开 API，适合在产品原型、数据采集与学习项目中快速定位可用数据来源。清单以 Markdown 形式维护、仓库标记语言为 Python，页面上还附有赞助商 API 套件与 Discord 社区入口。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">7</span><span class="repo-name">cjpais/Handy</span><a class="repo-link" href="https://github.com/cjpais/Handy">https://github.com/cjpais/Handy</a></div><div class="repo-meta">Rust ｜ ★ 36,015 ｜ ⑂ 3,424 ｜ 今日 +611</div><div class="repo-desc">完全离线的开源语音转文字工具</div><p class="repo-sum">跨平台桌面语音转文字应用，主打免费、开源、可扩展与隐私。按下自定义快捷键说话，松开后由本机的 Whisper 模型（Small、Medium、Turbo、Large，支持 GPU 加速）或面向 CPU 优化的 Parakeet V3 完成转写，并用 Silero 做静音检测，文字直接粘贴进当前输入框，全程不把音频发往云端。它用 Rust 构建，支持 Windows、macOS 与 Linux，提供 Homebrew、winget、deb 等安装方式，另有 Raycast 扩展与命令行控制参数。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">8</span><span class="repo-name">Donchitos/Claude-Code-Game-Studios</span><a class="repo-link" href="https://github.com/Donchitos/Claude-Code-Game-Studios">https://github.com/Donchitos/Claude-Code-Game-Studios</a></div><div class="repo-meta">Shell ｜ ★ 31,577 ｜ ⑂ 4,316 ｜ 今日 +742</div><div class="repo-desc">Claude Code 变身游戏工作室</div><p class="repo-sum">一套把单次 Claude Code 会话改造成完整游戏开发工作室的配置模板，包含 49 个专职子代理、74 个技能、15 个钩子、14 条规则与 62 个文档模板。代理按真实工作室层级分为总监、部门主管与专家三层，覆盖策划、程序、美术、音频、叙事、QA 与发行，并针对 Godot 4、Unity、Unreal Engine 5 提供专属引擎代理组。它用斜杠命令串起从头脑风暴、系统设计、史诗与故事拆分到评审、测试与发布的全流程，钩子负责代码与设计文档的自动校验，采用 MIT 协议。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">9</span><span class="repo-name">kornia/kornia</span><a class="repo-link" href="https://github.com/kornia/kornia">https://github.com/kornia/kornia</a></div><div class="repo-meta">Python ｜ ★ 11,565 ｜ ⑂ 1,456 ｜ 今日 +88</div><div class="repo-desc">PyTorch 上的可微计算机视觉库</div><p class="repo-sum">基于 PyTorch 的可微计算机视觉库，提供丰富的可微图像处理与几何视觉算子，方便直接嵌入深度学习流程并享受批处理、自动求导与 GPU 加速。它自述拥有 1200 多个公开算子，涵盖相机模型、对极几何、最小求解器与 RANSAC、特征检测匹配、边缘检测、形态学以及色彩空间转换，并支持带标注的增强流水线与 SIFT、LoFTR、LightGlue 等模型。项目以 Python 实现，多数算子在输入设备上直接计算且可被 torch.compile 与 ONNX 导出，目标用户是需要空间 AI 与几何视觉能力的研究和工程团队。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">10</span><span class="repo-name">beenuar/AiSOC</span><a class="repo-link" href="https://github.com/beenuar/AiSOC">https://github.com/beenuar/AiSOC</a></div><div class="repo-meta">Python ｜ ★ 5,824 ｜ ⑂ 613 ｜ 今日 +436</div><div class="repo-desc">可自托管、决策可审计的开源 AI SOC</div><p class="repo-sum">开源的 AI 安全运营中心，可自托管部署：它接入各类安全遥测并归一化，用规则库检测、把命中项归并为告警，再由 AI 代理逐步调查并给出处置建议，每一步提示与工具调用都被记录成可回放的决策账本，最终动作需人工批准。项目称其 7015 条规则库中已有 2530 条可执行，内置 87 个点击即连的数据连接器、对 Splunk、Sentinel 与 Elastic 检测规则的迁移工具，以及供 Claude、Cursor 等调用的 MCP 服务器。它以 Python 为主、MIT 协议，一条 make up 即可在本地 Docker Compose 上起整套服务，另有不依赖 Docker 的沙箱演示。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
