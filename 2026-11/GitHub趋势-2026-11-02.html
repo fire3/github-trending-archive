@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-11-02</div>
+    <div class="sub">本地模型、智能体与工程技能包齐上榜</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">本地模型、智能体与工程技能包齐上榜</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>本地 MoE 推理成为主线，FreeToken 与 colibri 各走不同技术路线</li><li>智能体从生成代码扩展到操作桌面、管理团队与并行工作流</li><li>Agent Skills 生态持续升温，技能包强调可组合与工程纪律</li><li>Python 仍是应用层主力，Rust/C 承担性能敏感的底层工具</li><li>Heretic 让普通玩家也能免训练改造模型行为</li></ul>
+<p class="overview">今天的榜单围绕三个关键词展开：把大模型搬回本地、让智能体真正干活、以及改善开发者与智能体的协作方式。10 个项目中 Python 占 4 席，Rust 占 2 席，C、C++、Shell、TypeScript 各 1 席，反映出上层应用仍以 Python 为主、底层工具则偏向系统语言。值得留意的是，FreeToken 与 colibri 同走消费级硬件跑 MoE 的路线，而 Paperclip、agent-desktop、worktrunk 则从团队编排、桌面操作和并行工作流三个角度补齐智能体基础设施。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">1</span><span class="repo-name">vercel-labs/agent-desktop</span><a class="repo-link" href="https://github.com/vercel-labs/agent-desktop">https://github.com/vercel-labs/agent-desktop</a></div><div class="repo-meta">Rust ｜ ★ 7,689 ｜ ⑂ 548 ｜ 今日 +2,243</div><div class="repo-desc">让智能体看见并操作桌面应用</div><p class="repo-sum">Vercel Labs 推出的桌面 computer use 工具，使用 Rust 实现，通过操作系统无障碍树读取任意应用的真实 UI 结构，并为可操作元素生成稳定引用。智能体依据引用执行点击、输入、滚动等操作，再重新快照校验，从而避免依赖像素猜测；项目提供 CLI 与 C 库，覆盖 macOS、Windows 和 Linux，默认以无头方式运行，并定义统一的 JSON 输出与错误码契约。目标用户是构建桌面自动化智能体的开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">3</span><span class="repo-name">D4Vinci/Scrapling</span><a class="repo-link" href="https://github.com/D4Vinci/Scrapling">https://github.com/D4Vinci/Scrapling</a></div><div class="repo-meta">Python ｜ ★ 92,054 ｜ ⑂ 9,709 ｜ 今日 +892</div><div class="repo-desc">一体化 Python 网页抓取框架</div><p class="repo-sum">把快速 HTTP 请求、隐身浏览器、强大解析和并发爬虫整合到一个 Python 库中。它支持 JavaScript 渲染、Cloudflare Turnstile 处理、CSS/XPath/正则提取、自适应元素追踪、代理轮换、失败重试、断点续爬以及 JSON/JSONL/CSV/XML 导出，并提供 MCP 服务器、Agent Skill 与 CLI，方便 AI 智能体直接抓取数据。覆盖从单页字段提取到整站采集的完整流程。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">4</span><span class="repo-name">hyprwm/Hyprland</span><a class="repo-link" href="https://github.com/hyprwm/Hyprland">https://github.com/hyprwm/Hyprland</a></div><div class="repo-meta">C++ ｜ ★ 39,597 ｜ ⑂ 2,138 ｜ 今日 +38</div><div class="repo-desc">高颜值动态平铺 Wayland 合成器</div><p class="repo-sum">独立实现的动态平铺 Wayland 合成器，不依赖 wlroots、libweston、kwin 或 mutter，强调视觉效果与深度可定制性。它提供渐变边框、多种模糊、动画、发光与阴影、插件系统和内置插件管理，并支持套接字 IPC、原生输入法、特殊工作区、窗口分组以及 Dwindle、滚动、Master、Monocle 等布局。使用 C++ 编写，面向追求桌面美学和精细控制的 Linux 用户。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">6</span><span class="repo-name">FlashML-org/FreeToken</span><a class="repo-link" href="https://github.com/FlashML-org/FreeToken">https://github.com/FlashML-org/FreeToken</a></div><div class="repo-meta">Python ｜ ★ 15,715 ｜ ⑂ 1,568 ｜ 今日 +242</div><div class="repo-desc">在消费级硬件上跑前沿 MoE</div><p class="repo-sum">面向个人电脑和消费硬件的边缘 MoE 推理引擎，把 GPU、CPU、主机内存与互连视为统一的弹性推理平台，声称可在游戏 PC 上本地运行 290B 以上参数的前沿开源模型。核心能力包括带宽自适应的 CPU-GPU 协同执行、双缓冲预填充流式加载、全局专家缓存、面向智能体上下文编辑的语义感知缓存，以及无需重启即可在专家缓存与 KV 显存之间动态重分配。Python 实现，提供桌面应用与 CLI，兼容 Anthropic/OpenAI 接口，并原生支持 RTX 30/40/50 系列显卡。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">10</span><span class="repo-name">JustVugg/colibri</span><a class="repo-link" href="https://github.com/JustVugg/colibri">https://github.com/JustVugg/colibri</a></div><div class="repo-meta">C ｜ ★ 46,107 ｜ ⑂ 5,313 ｜ 今日 +655</div><div class="repo-desc">纯 C 零依赖的本地大模型引擎</div><p class="repo-sum">纯 C 编写、无需显卡的本地大模型推理引擎，利用 MoE 每个 token 只激活少量专家的特性，把常驻部分留在内存，其余专家在需要时从磁盘流式读取。项目内置十余个模型引擎，覆盖 GLM、Kimi、DeepSeek、Qwen、OLMoE 等系列，支持直接读取 GGUF 文件，并可在 CPU、Vulkan 与 CUDA 后端运行。它提供一键安装脚本、浏览器面板以及 OpenAI/Anthropic 兼容接口，最低 8GB 内存即可起步。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">11</span><span class="repo-name">mattpocock/skills</span><a class="repo-link" href="https://github.com/mattpocock/skills">https://github.com/mattpocock/skills</a></div><div class="repo-meta">Shell ｜ ★ 309,626 ｜ ⑂ 26,055 ｜ 今日 +970</div><div class="repo-desc">面向真实工程的智能体技能集</div><p class="repo-sum">作者日常使用的智能体技能集合，主张面向真实工程而非“氛围编程”，可搭配 Claude Code、Codex、GitHub Copilot、Gemini CLI 等编码智能体。技能设计得小而可组合，针对需求理解偏差、表达冗长、缺少反馈回路等常见失败模式，提供需求质询、共享术语、测试驱动开发、缺陷诊断等流程，并支持插件市场或 npx 方式安装。以 Shell 配置和脚本为主，适合希望为智能体建立可复用工程工作流的开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">12</span><span class="repo-name">max-sixty/worktrunk</span><a class="repo-link" href="https://github.com/max-sixty/worktrunk">https://github.com/max-sixty/worktrunk</a></div><div class="repo-meta">Rust ｜ ★ 9,806 ｜ ⑂ 349 ｜ 今日 +115</div><div class="repo-desc">为并行智能体管理 worktree</div><p class="repo-sum">用 Rust 编写的 Git worktree 命令行管理器，把 worktree 的切换、创建、删除和列出简化为接近分支操作的体验，路径由可配置模板自动生成。它面向同时运行多个 AI 编码智能体的场景，提供生命周期 hooks、根据 diff 生成提交信息、一条命令完成合并与清理、带 CI 状态的交互选择器、跨 worktree 共享构建缓存，以及为每个 worktree 分配独立开发端口等能力。可通过 Homebrew、Cargo、Winget、Pacman 等渠道安装。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">13</span><span class="repo-name">paperclipai/paperclip</span><a class="repo-link" href="https://github.com/paperclipai/paperclip">https://github.com/paperclipai/paperclip</a></div><div class="repo-meta">TypeScript ｜ ★ 110,062 ｜ ⑂ 18,244 ｜ 今日 +507</div><div class="repo-desc">管理 AI 智能体团队的运营台</div><p class="repo-sum">开源的 AI 智能体团队编排应用，由 Node.js 服务端和 React 界面组成，把目标、任务、成本、权限与历史记录集中到一个仪表盘。它围绕智能体任务管理、智能体组织架构、技能训练与评测、跨供应商运行时四大支柱，提供审批与审核门、角色权限、共享技能库、评测记录、沙箱和 MCP 集成等能力。可接入 OpenClaw、Codex、Claude、Cursor 等智能体，适合需要让多个智能体长期自主运行并随时审计的团队。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">14</span><span class="repo-name">karpathy/nanochat</span><a class="repo-link" href="https://github.com/karpathy/nanochat">https://github.com/karpathy/nanochat</a></div><div class="repo-meta">Python ｜ ★ 59,586 ｜ ⑂ 8,384 ｜ 今日 +325</div><div class="repo-desc">百美元级 GPT-2 训练实验框架</div><p class="repo-sum">极简的 LLM 训练实验框架，面向单 GPU 节点，覆盖分词、预训练、微调、评估和推理等主要阶段。整个配置围绕 --depth 这一个复杂度旋钮展开，其余宽度、头数、学习率等超参数会自动推导；官方称约 48 美元、两小时 8×H100 即可训练出 GPT-2 能力模型，使用 spot 实例可低至约 15 美元。代码以 Python/PyTorch 为主，并维护“时间到 GPT-2”排行榜以推动社区优化。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">15</span><span class="repo-name">p-e-w/heretic</span><a class="repo-link" href="https://github.com/p-e-w/heretic">https://github.com/p-e-w/heretic</a></div><div class="repo-meta">Python ｜ ★ 37,731 ｜ ⑂ 4,303 ｜ 今日 +404</div><div class="repo-desc">免训练改造语言模型行为</div><p class="repo-sum">无需重新训练即可修改语言模型行为的工具，通过对比示例提示和配套评分器，用数学方法对模型进行定向消融与参数搜索。默认配置用于移除拒答和审查，也可以按配置抑制废话、减少谄媚、降低幽默感或调整情绪倾向；支持多数稠密模型、部分多模态模型和多种 MoE 架构，并可选 4-bit 量化以降低显存占用。使用 Python 实现，处理完成后可直接保存模型、上传 Hugging Face、对话测试或运行标准基准。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
