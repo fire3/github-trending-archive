@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-11-03</div>
+    <div class="sub">AI 代理技能与本地优先工具占据今日榜单</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">AI 代理技能与本地优先工具占据今日榜单</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>编码代理生态外溢：插件与技能成为新分发形态</li><li>本地优先回潮：语音听写、AWS 模拟器都不出机器</li><li>Python 仍是主力，Rust 与 Java 在性能场景补位</li><li>硬核工程项目受捧：4GB 显存微调、光谱胶片模拟</li></ul>
+<p class="overview">今天的榜单几乎被 AI 代理生态包场：从 Spotify 官方插件、GitHub Copilot CLI，到把编码助手改造成视频工作室的 OpenMontage 和专治 AI 腔的 humanizer，代理正在从聊天窗口走向具体工作流。与之并行的是本地优先思路，语音听写和 AWS 模拟器都强调离线、免账号、无功能门槛。语言分布上 Python 依然最多，Rust 与 Java 分别守住桌面端性能和企业级仿真，硬件极客向的无线审计与胶片光谱模拟也挤进了前列。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">7</span><span class="repo-name">spotify/portal-ai-plugins</span><a class="repo-link" href="https://github.com/spotify/portal-ai-plugins">https://github.com/spotify/portal-ai-plugins</a></div><div class="repo-meta">TypeScript ｜ ★ 2,904 ｜ ⑂ 228 ｜ 今日 +94</div><div class="repo-desc">Spotify 平台的编码代理插件</div><p class="repo-sum">Spotify 官方开源的代理插件集，把 Spotify Portal 开发者平台接入 Claude Code、Codex、Cursor 和 pi。插件围绕 Portal CLI 提供认证配置、软件目录与技术文档的自然语言检索、服务运维简报生成，以及带帮助、dry-run 和二次确认的 Portal 动作调用；还包含 Fleetshift 任务的创建、运行、排查和在完成后自动开 PR 的工作流。用 TypeScript 编写，通过 npx 调用 @spotify/portal-cli，另附 shunt 插件可把批量读文件等重 I/O 任务转交给更便宜的模型。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">8</span><span class="repo-name">floci-io/floci</span><a class="repo-link" href="https://github.com/floci-io/floci">https://github.com/floci-io/floci</a></div><div class="repo-meta">Java ｜ ★ 28,116 ｜ ⑂ 3,155 ｜ 今日 +219</div><div class="repo-desc">LocalStack 的免费本地替代</div><p class="repo-sum">免费开源的本地 AWS 模拟器，面向开发、测试与 CI，不需要云账号、认证令牌或付费功能门槛。所有服务统一挂在 localhost:4566，现有的 AWS SDK、CLI、Terraform、CDK、OpenTofu 和测试套件可直接指向它；Lambda、RDS、ECS、EC2 等需要保真的服务由真实 Docker 承载。提供 CLI、各平台独立二进制、Docker Compose 部署以及浏览器控制台，可作为 LocalStack 的替换镜像直接迁移。用 Java 编写，MIT 协议，同家族另有 Azure、GCP 和 OCI 版本。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">9</span><span class="repo-name">Usagi-org/ai-goofish-monitor</span><a class="repo-link" href="https://github.com/Usagi-org/ai-goofish-monitor">https://github.com/Usagi-org/ai-goofish-monitor</a></div><div class="repo-meta">Python ｜ ★ 16,061 ｜ ⑂ 2,814 ｜ 今日 +204</div><div class="repo-desc">Playwright 驱动的闲鱼监控</div><p class="repo-sum">基于 Playwright 与多模态大模型的闲鱼多任务监控系统，帮用户从海量二手商品里筛出真正想要的东西。支持用自然语言创建任务、价格区间、包邮与发布时间范围、省市区三级区域筛选、Cron 定时调度、多账号与代理池轮换，并通过 ntfy、企业微信、Bark、Telegram、Webhook 等渠道即时推送结果。配有完整的 Web 管理界面，后端为 FastAPI，任务、结果与价格历史存入 SQLite，Docker 一键部署且镜像内置 Chromium。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">10</span><span class="repo-name">anomalyco/hex</span><a class="repo-link" href="https://github.com/anomalyco/hex">https://github.com/anomalyco/hex</a></div><div class="repo-meta">Rust ｜ ★ 4,200 ｜ ⑂ 246 ｜ 今日 +1,134</div><div class="repo-desc">跨平台本地语音听写工具</div><p class="repo-sum">面向 macOS、Windows 和 Linux 的本地语音听写工具：按住快捷键说话，松开后在本机完成转写，并直接粘贴到当前使用的应用里。首次运行会下载语音模型，此后音频数据不出设备；实验性功能集中在侧边栏底部的 Labs 区域。README 给出各平台安装包，也支持 Homebrew、AUR、Nix 和一键安装脚本。主程序用 Rust 编写，MIT 协议，项目不接受 PR，只接受 issue 反馈。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">14</span><span class="repo-name">calesthio/OpenMontage</span><a class="repo-link" href="https://github.com/calesthio/OpenMontage">https://github.com/calesthio/OpenMontage</a></div><div class="repo-meta">Python ｜ ★ 75,614 ｜ ⑂ 9,991 ｜ 今日 +693</div><div class="repo-desc">让编码助手变身视频工作室</div><p class="repo-sum">自称首个开源的智能体化视频制作系统，把 AI 编码助手变成一整间视频工作室。用户用自然语言描述想法，代理自行完成调研、脚本、素材生成、剪辑和最终合成，仓库内置 12 条制作流水线、100 多个工具以及 700 多份技能与制作知识文件。它不止会拿几张静图做动效，还能从免费素材与开放档案中检索真实动态片段、编排时间线并渲染成片；也可以粘贴 YouTube、Reel、TikTok 等参考视频，得到若干概念方案、成本估算与样片。Python 实现，AGPLv3 授权。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">18</span><span class="repo-name">derv82/wifit3</span><a class="repo-link" href="https://github.com/derv82/wifit3">https://github.com/derv82/wifit3</a></div><div class="repo-meta">Python ｜ ★ 3,068 ｜ ⑂ 306 ｜ 今日 +217</div><div class="repo-desc">跨平台 USB 无线网络审计工具</div><p class="repo-sum">跨平台的 USB 无线审计工具，可以看作 Wifite 的重写版，只支持 USB 网卡，但在 Linux、Windows 和 macOS 上行为一致。它绕开操作系统自带的 Wi-Fi 协议栈，内置 Python 移植的迷你驱动直接操控设备，因此不依赖 aircrack-ng 或 reaver，运行时只需 PyUSB 与 Textual。功能包括多网卡聚合抓包与指定网卡注入、2.4GHz 与 5GHz 实时扫描、WPA/WPA2 握手和 PMKID 捕获、WPA3 降级 EvilTwin、WPS PixieDust 与 PIN 爆破以及 WEP 套件，并支持导出 pcap 与 hc22000 文件。使用时需要至少一块受支持的 USB 网卡。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">19</span><span class="repo-name">andreavolpato/spektrafilm</span><a class="repo-link" href="https://github.com/andreavolpato/spektrafilm">https://github.com/andreavolpato/spektrafilm</a></div><div class="repo-meta">Python ｜ ★ 1,789 ｜ ⑂ 240 ｜ 今日 +139</div><div class="repo-desc">光谱物理胶片模拟参考实现</div><p class="repo-sum">一个基于物理的光谱胶片模拟项目，尝试把厂商数据表里的光谱数据变成可信的胶片、相纸与扫描渲染。流程从相机 RAW 的线性 RGB 出发，重建光谱后穿过虚拟负片，经带二向色滤色片的简化彩色放大机投到相纸上，再用反射光模拟扫描，颗粒、光晕、耦合剂与相纸预闪等效果都按物理方式加入。仓库提供桌面 GUI，可导入 RAW 或线性图像、切换胶片与相纸配置、交互调参并在快速预览和高精度输出之间切换。Python 编写，GPLv3 授权，被 vkdt、ART、OFX 插件等衍生实现视作参考实现。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">20</span><span class="repo-name">MakazhanAlpamys/Soup</span><a class="repo-link" href="https://github.com/MakazhanAlpamys/Soup">https://github.com/MakazhanAlpamys/Soup</a></div><div class="repo-meta">Python ｜ ★ 10,061 ｜ ⑂ 1,660 ｜ 今日 +135</div><div class="repo-desc">一份 YAML 搞定 LLM 微调</div><p class="repo-sum">把大模型微调与后训练压缩成一条命令的工具：写一份 YAML，运行 soup train 即可开始，不必先 SSH 进机器或和基础设施缠斗，批大小、GPU 检测与量化都由工具自动处理，还带 Web UI。核心亮点是层流式加载，把冻结的基础模型留在内存里逐层送进 GPU，官方称能在 4GB 的笔记本显卡上训练 8B 模型，并给出与常驻显存方案逐位一致的对照实验，该特性可选且仍标记为 BETA。Python 编写，已发布到 PyPI，提供多语言文档和可在免费 Colab 上复现的笔记本。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">22</span><span class="repo-name">blader/humanizer</span><a class="repo-link" href="https://github.com/blader/humanizer">https://github.com/blader/humanizer</a></div><div class="repo-meta">Python ｜ ★ 64,190 ｜ ⑂ 5,078 ｜ 今日 +460</div><div class="repo-desc">去掉 AI 写作痕迹的代理技能</div><p class="repo-sum">一个用于改写 AI 生成文本的代理技能，目标是让文字读起来像人写的，同时不改变原意。它依据维基百科编辑用来识别机器文本的《Signs of AI writing》指南，归纳出 26 种典型特征，例如「不只是 X 而是 Y」、一句话收尾、故作深刻的套话、铺垫式开场和无人可辩的假争论，并逐条标注、重写、复查。可在 Claude Code、Codex 及其他支持 Skills 的代理中安装，既能粘贴文本也能指定文件，只改散文、不动代码与链接目标，还支持用范文模仿个人语气；作者明确说明不以绕过 AI 检测为目标。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">23</span><span class="repo-name">github/copilot-cli</span><a class="repo-link" href="https://github.com/github/copilot-cli">https://github.com/github/copilot-cli</a></div><div class="repo-meta">Python ｜ ★ 11,332 ｜ ⑂ 1,974 ｜ 今日 +11</div><div class="repo-desc">Copilot 编码代理进驻终端</div><p class="repo-sum">把 GitHub Copilot 编码代理搬进终端的命令行工具，用自然语言对话完成写码、调试和代码理解，内置的代理框架与 Copilot 编码代理同源。它与 GitHub 工作流深度集成，可直接访问仓库、issue 和 PR，默认接入 GitHub 的 MCP 服务器并支持自定义 MCP 扩展，每个动作执行前都需要用户确认。支持 Linux、macOS 和 Windows，可通过安装脚本、Homebrew、WinGet 或 npm 安装，需要有效的 Copilot 订阅；另发布容器镜像，供 SDK 客户端以无头服务方式连接。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
