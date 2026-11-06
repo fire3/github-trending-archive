@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-11-06</div>
+    <div class="sub">Agent Skills 霸榜，语音与模型优化同台竞技</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">Agent Skills 霸榜，语音与模型优化同台竞技</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>Agent Skills 集中上榜：Google、Gemini、AWS 与社区项目争夺代理上下文入口</li><li>语音 AI 转向长音频与实时：VibeVoice 支持 60 分钟转写与流式识别</li><li>模型压缩链路打通：Model Optimizer 直连 TensorRT-LLM 与 vLLM</li><li>Python 占 7 席，C、Rust、JavaScript 各 1 席，算法库与代理基础设施并重</li></ul>
+<p class="overview">今天的榜单几乎被 AI 代理生态包场：Google、Gemini、AWS 与社区作者同时押注 Agent Skills，试图用可安装的技能包补齐编码代理的领域知识；VibeVoice、Switch 与 agent-browser 则分别从语音、协作和浏览器操作扩展代理的能力边界。语言分布上 Python 以 7 席绝对领先，C、Rust、JavaScript 各占 1 席。值得注意的是，LZ4 这类经典基础库与 TimesFM、Model Optimizer 等模型侧项目同日出现，说明热度正从纯应用层向底层压缩、推理优化和时间序列基础模型延伸。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">8</span><span class="repo-name">lz4/lz4</span><a class="repo-link" href="https://github.com/lz4/lz4">https://github.com/lz4/lz4</a></div><div class="repo-meta">C ｜ ★ 12,521 ｜ ⑂ 1,640 ｜ 今日 +23</div><div class="repo-desc">极致速度的无损压缩算法</div><p class="repo-sum">LZ4 是用 C 实现的无损压缩算法与库，单核压缩速度超过 500 MB/s，解码可达每秒数 GB，多核环境下通常逼近内存带宽。它提供可动态调整的加速因子来平衡压缩率与速度，并附带以 CPU 时间换压缩率的 LZ4_HC 高压缩版本，解码速度保持一致。库与命令行工具均支持字典压缩，适合日志、存储与传输等吞吐敏感场景；代码以 BSD 2-Clause 开源，CLI 采用 GPL-2.0-or-later，支持 Make、CMake、Meson、Visual Studio 与 vcpkg 等方式构建。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">9</span><span class="repo-name">google/skills</span><a class="repo-link" href="https://github.com/google/skills">https://github.com/google/skills</a></div><div class="repo-meta">Python ｜ ★ 22,596 ｜ ⑂ 1,903 ｜ 今日 +211</div><div class="repo-desc">Google 官方 Agent 技能包</div><p class="repo-sum">这是 Google 官方维护的 Agent Skills 仓库，覆盖 Google Cloud 等 Google 产品与技术，遵循 agentskills.io 规范，可通过 npx skills add 安装到常用编码代理。技能从 IAM 认证、Cloud 入门与基础架构搭建，延伸到解决方案架构、多代理安全、RAG 与企业搜索、数据分析、Gemini API 和 Genkit 多语言开发。项目以 Python 为主要语言，面向希望让 AI 代理按官方最佳实践使用 Google 技术栈的开发者，并提供技能更新命令。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">10</span><span class="repo-name">vercel-labs/agent-browser</span><a class="repo-link" href="https://github.com/vercel-labs/agent-browser">https://github.com/vercel-labs/agent-browser</a></div><div class="repo-meta">Rust ｜ ★ 46,201 ｜ ⑂ 3,164 ｜ 今日 +150</div><div class="repo-desc">给 AI 代理用的浏览器 CLI</div><p class="repo-sum">agent-browser 是 Vercel Labs 用 Rust 编写的原生浏览器自动化命令行工具，专为 AI 代理设计。它的 snapshot 命令把页面转成紧凑的可访问性树文本，并为每个元素附上 @e1 之类的引用，代理据此执行点击等操作，再重新读取页面确认结果。命令通过后台守护进程经 Chrome DevTools Protocol 控制浏览器，浏览器在命令之间保持打开，支持独立会话、连接现有 Chrome、云浏览器与 iOS 模拟器。项目采用 Apache-2.0 许可，可通过 npm、Homebrew 或 npx 快速使用，并内置与版本匹配的技能说明。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">12</span><span class="repo-name">ConardLi/garden-skills</span><a class="repo-link" href="https://github.com/ConardLi/garden-skills">https://github.com/ConardLi/garden-skills</a></div><div class="repo-meta">JavaScript ｜ ★ 14,436 ｜ ⑂ 1,670 ｜ 今日 +175</div><div class="repo-desc">面向编码代理的生产级技能集</div><p class="repo-sum">Garden Skills 是面向 Claude Code、Cursor、Codex 等 AI 编码代理的开源 Agent Skills 合集，强调技能可直接投入生产使用。内容涵盖代码渲染短视频、网页视频与演示文稿、网页设计、图像生成、长文排版以及本地知识库检索等方向，每个技能都配套明确的工作流与确认检查点。仓库提供 npx skills CLI、Claude Code 插件市场、Release 固定 ZIP、手动复制与 git submodule 等多种安装方式，并附有中文、英文和日文文档，方便团队按需挑选与组合。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">13</span><span class="repo-name">microsoft/VibeVoice</span><a class="repo-link" href="https://github.com/microsoft/VibeVoice">https://github.com/microsoft/VibeVoice</a></div><div class="repo-meta">Python ｜ ★ 56,346 ｜ ⑂ 6,344 ｜ 今日 +223</div><div class="repo-desc">开源前沿语音 AI 模型家族</div><p class="repo-sum">VibeVoice 是微软开源的前沿语音 AI 模型家族，同时覆盖文本转语音与自动语音识别。ASR 模型可在单次推理中处理长达 60 分钟的音频，输出包含说话人、时间戳与内容的结构化转写，支持自定义热词和边收边转的流式识别，并有可在 CPU 上实时运行的 BitNet 版本。TTS 侧提供支持流式文本输入、适合长音频生成的 Realtime-0.5B。其核心是 7.5 Hz 超低帧率的声学与语义连续语音分词器，配合大语言模型理解上下文、扩散头生成声学细节，支持 50 多种语言，并提供微调代码与 vLLM 推理支持。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">16</span><span class="repo-name">NVIDIA/Model-Optimizer</span><a class="repo-link" href="https://github.com/NVIDIA/Model-Optimizer">https://github.com/NVIDIA/Model-Optimizer</a></div><div class="repo-meta">Python ｜ ★ 5,546 ｜ ⑂ 799 ｜ 今日 +20</div><div class="repo-desc">统一模型压缩与加速工具箱</div><p class="repo-sum">NVIDIA Model Optimizer 是统一的模型优化库，汇集量化、剪枝、神经架构搜索、蒸馏、投机解码与稀疏化等技术，输入支持 Hugging Face、PyTorch 和 ONNX 模型。用户可以用 Python API 组合这些技术并导出优化后的量化检查点，直接部署到 TensorRT-LLM、TensorRT、vLLM、SGLang 等推理框架，同时与 Megatron-Bridge、Megatron-LM 和 Hugging Face Accelerate 集成。近期工作聚焦 NVFP4、IQ2_S 等低比特量化以及量化感知蒸馏，目标是在大幅压缩模型体积的同时恢复精度并提升推理吞吐。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">19</span><span class="repo-name">aws/agent-toolkit-for-aws</span><a class="repo-link" href="https://github.com/aws/agent-toolkit-for-aws">https://github.com/aws/agent-toolkit-for-aws</a></div><div class="repo-meta">Python ｜ ★ 3,416 ｜ ⑂ 437 ｜ 今日 +14</div><div class="repo-desc">AWS 官方代理工具与插件套件</div><p class="repo-sum">这是 AWS 官方支持的代理工具包，为 AI 编码代理提供 MCP 服务器、技能与插件，帮助其在 AWS 上构建、部署和管理应用。它兼容 Claude Code、Codex、Cursor、Devin、Kiro 等开发者常用的代理，提供 aws-core、aws-agents、aws-data-analytics、aws-agents-for-devsecops 和 aws-startup-advisor 等插件，覆盖服务选型、CDK 与 CloudFormation、无服务器、容器、存储、可观测性、计费、Bedrock 与 AgentCore、数据分析以及安全审计。用户也可以通过 AWS CLI 的 aws configure agent-toolkit 直接在终端使用。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">20</span><span class="repo-name">sandbox-quantum/switch</span><a class="repo-link" href="https://github.com/sandbox-quantum/switch">https://github.com/sandbox-quantum/switch</a></div><div class="repo-meta">Python ｜ ★ 3,998 ｜ ⑂ 286 ｜ 今日 +182</div><div class="repo-desc">自托管的团队 AI 同事</div><p class="repo-sum">Switch 是开源的自托管 AI 队友平台，让代理直接加入 Slack、Microsoft Teams、Discord、Telegram 和 Mattermost 的频道，与团队共享同一段对话、决策和文档。它强调任意代理、任意模型、任意供应商：只要遵循协议，笔记本上的 Claude Code、同事的 Codex 或服务器上的 LangChain 代理都能加入。每个代理可以配置角色、指令和工具，并按房间隔离上下文与访问权限；平台提供 macOS、Windows、Linux 桌面控制台，以及权限管控和成本报告，数据保留在企业自有服务器上。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">21</span><span class="repo-name">google-research/timesfm</span><a class="repo-link" href="https://github.com/google-research/timesfm">https://github.com/google-research/timesfm</a></div><div class="repo-meta">Python ｜ ★ 35,258 ｜ ⑂ 3,455 ｜ 今日 +57</div><div class="repo-desc">零样本时间序列基础模型</div><p class="repo-sum">TimesFM 是 Google Research 开发的预训练时间序列基础模型，用于零样本预测。TimesFM 3.0 原生支持多变量与单变量预测，并支持仅使用历史以及同时使用历史与未来的协变量，无需针对具体任务调参，在 fev-bench、TIME 和 GIFT-Eval 等基准上取得领先成绩。源码采用 Apache-2.0 许可，2.5 及更早版本的权重同样是 Apache-2.0，但 3.0 权重使用非商用许可，商业和生产用途需通过 BigQuery ML 等 Google Cloud 服务。该模型已进入 BigQuery ML、Google Sheets 与 Vertex Model Garden。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">22</span><span class="repo-name">google-gemini/gemini-skills</span><a class="repo-link" href="https://github.com/google-gemini/gemini-skills">https://github.com/google-gemini/gemini-skills</a></div><div class="repo-meta">Python ｜ ★ 4,411 ｜ ⑂ 483 ｜ 今日 +12</div><div class="repo-desc">Gemini API 开发技能库</div><p class="repo-sum">这是面向 Gemini API、SDK 与模型交互的 Agent Skills 库，试图弥补大模型因训练时间固定而产生的知识缺口，尤其是快速变化的 SDK 与最佳实践。仓库包含 gemini-api-dev、gemini-api-cli、gemini-live-api-dev 和 gemini-omni-flash-api 等技能，覆盖文本与多模态生成、多轮对话与流式输出、函数调用、结构化输出、图像与语音生成、Live API 实时双向流、Deep Research 以及视频生成。可按 npx skills、Context7、Claude Code、Cursor、Codex、Antigravity 等方式安装，官方评估称加入技能后代理生成正确 API 代码的比例明显提升。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
