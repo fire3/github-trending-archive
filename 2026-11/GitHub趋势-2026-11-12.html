@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-11-12</div>
+    <div class="sub">AI 编码代理与本地推理同台，基础设施常青</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">AI 编码代理与本地推理同台，基础设施常青</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>AI 编码代理占多席：Qwen Code、OpenBot、free-claude-code 同上榜</li><li>本地推理升温：TensorFold 以 Zig 直写 Metal/CUDA，llama.cpp 吸星</li><li>Python 与 TypeScript 各占三席，语音识别与 Web 框架经典项目回归</li><li>多模型、多协议、可自托管成为新一代 Agent 工具的共同取向</li><li>nvm、Node.js、FastAPI 等基础设施项目凭稳定刚需保持日增热度</li></ul>
+<p class="overview">今日榜单由两条主线交织而成：一端是 Qwen Code、OpenBot、free-claude-code 代表的 AI 编码代理与多模型路由，另一端是 TensorFold、llama.cpp 代表的本地推理引擎，二者共同指向“自带算力、自由选模型”的开发方式。语言分布上 Python 与 TypeScript 各占三席，Shell、Objective-C、Zig、JavaScript、C++ 各有一席，既有 nvm、Node.js、FastAPI 这样的长期基础设施，也有只支持特定 watchOS 版本的 Apple Watch 表盘工具，说明小众硬件玩法仍能冲上趋势榜。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">3</span><span class="repo-name">nvm-sh/nvm</span><a class="repo-link" href="https://github.com/nvm-sh/nvm">https://github.com/nvm-sh/nvm</a></div><div class="repo-meta">Shell ｜ ★ 95,913 ｜ ⑂ 10,753 ｜ 今日 +79</div><div class="repo-desc">Node 多版本管理命令行工具</div><p class="repo-sum">nvm 是 Node.js 的版本管理器，以符合 POSIX 的 bash 脚本实现，按用户安装、按 shell 生效，可在 sh、dash、ksh、zsh、bash 等 shell 中运行，覆盖 Linux、macOS 与 WSL。它让开发者用 nvm install、nvm use 等命令快速安装并切换多个 Node 版本，支持 .nvmrc 自动切换、从文件恢复默认全局包、离线安装与镜像源配置，也可借安装脚本写入 shell 配置或在 Docker 与 CI 流程中使用。项目以 Shell 编写，当前版本线为 v0.41.0，适合需要同时维护多个 Node 项目的开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">4</span><span class="repo-name">pookjw/HermesEnabler</span><a class="repo-link" href="https://github.com/pookjw/HermesEnabler">https://github.com/pookjw/HermesEnabler</a></div><div class="repo-meta">Objective-C ｜ ★ 1,316 ｜ ⑂ 124 ｜ 今日 +390</div><div class="repo-desc">跨设备启用 Hermès 表盘</div><p class="repo-sum">HermesEnabler 2 是一款 iOS/watchOS 应用，用于在任意 Apple Watch 上启用 Hermès 表盘，README 标注仅支持 watchOS 27.0 至 27.3 beta 1。项目以 Objective-C 编写，可通过 Releases 中的 IPA 配合 Sideloadly 侧载安装，也可用 Xcode 直接编译并运行到手表，随后在手表端按应用内步骤操作。作者提醒侧载时应关闭自动 Bundle ID、固定同一 Bundle Identifier 与 Apple ID 以保留数据，并在删除应用前先通过应用恢复 MobileGestalt 备份，使用时风险自负。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">6</span><span class="repo-name">QwenLM/qwen-code</span><a class="repo-link" href="https://github.com/QwenLM/qwen-code">https://github.com/QwenLM/qwen-code</a></div><div class="repo-meta">TypeScript ｜ ★ 29,516 ｜ ⑂ 3,375 ｜ 今日 +151</div><div class="repo-desc">跑在终端里的开源 AI 编码代理</div><p class="repo-sum">Qwen Code 是通义千问团队开源、常驻终端的 AI 编码代理，README 将其定位为覆盖终端、编辑器、桌面、浏览器与聊天工具的编码助手。它开箱集成 Auto-Memory、Auto-Skills、SubAgents、Agent Teams 与 MCP，支持 OpenAI、Anthropic、Gemini、Qwen 等协议以及 Ollama、vLLM 本地模型，并可在运行时切换。项目提供 curl 安装脚本、npm 与 Homebrew 安装方式，还有 VS Code、Zed、JetBrains 插件、桌面端、Web UI、多语言 SDK 与 Telegram、钉钉、微信、飞书等通道，主版本用 TypeScript 编写。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">7</span><span class="repo-name">ashhart/TensorFold</span><a class="repo-link" href="https://github.com/ashhart/TensorFold">https://github.com/ashhart/TensorFold</a></div><div class="repo-meta">Zig ｜ ★ 1,811 ｜ ⑂ 385 ｜ 今日 +58</div><div class="repo-desc">Zig 编写的多后端 LLM 推理引擎</div><p class="repo-sum">TensorFold 是一个用 Zig 编写的 LLM 推理引擎，可在 Apple Silicon 与 NVIDIA GPU 上直接读取检查点、对请求分词并运行 Metal 或 CUDA 内核，服务过程不需要 Python 或 MLX。它提供 tensorfold pull 与 serve 命令，兼容 OpenAI 风格接口以及 completions、Responses、Anthropic Messages，还支持并发上限、本地 Web 界面与桌面工作区。Mac 上可用 Homebrew 安装，Linux 需要 glibc 2.28 以上与 R580 以上驱动；此外还有面向企业的 Starlight 网关与实验性的 Living Weights 功能。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">8</span><span class="repo-name">nodejs/node</span><a class="repo-link" href="https://github.com/nodejs/node">https://github.com/nodejs/node</a></div><div class="repo-meta">JavaScript ｜ ★ 123,487 ｜ ⑂ 38,050 ｜ 今日 +133</div><div class="repo-desc">跨平台开源 JavaScript 运行时</div><p class="repo-sum">Node.js 是开源、跨平台的 JavaScript 运行时，由 OpenJS Foundation 支持，并采用开放治理模式与技术指导委员会管理。项目按语义化版本发布，区分 Alpha、Current、LTS 与 Nightly 四类版本：每年 4 月发布新的大版本，10 月转为 LTS，每个大版本合计可获得 36 个月支持。仓库主要用 JavaScript 编写，包含构建、发布校验、安全策略与贡献指南，适合需要在服务端运行 JavaScript 的开发者与库作者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">11</span><span class="repo-name">CopilotKit/OpenBot</span><a class="repo-link" href="https://github.com/CopilotKit/OpenBot">https://github.com/CopilotKit/OpenBot</a></div><div class="repo-meta">TypeScript ｜ ★ 11,185 ｜ ⑂ 1,387 ｜ 今日 +291</div><div class="repo-desc">可自托管的 AI 同事工作台</div><p class="repo-sum">OpenBot 是 CopilotKit 推出的开源 AI 同事工作台，主打可自托管与企业级治理，每个 AI 同事都拥有自己的浏览器、文件和工具，动作在执行前确定、执行后留痕。它允许自选 OpenAI、Claude、Gemini 或兼容 OpenAI 接口的开源模型，并通过 AG-UI 接入不同框架与平台上的既有 Agent，同时用公司登录、角色、工具权限、审批与审计统一管理。前端覆盖 Mac、Windows、Web、iOS、Android、Slack 与 Teams，后端可用 Helm 部署到 Kubernetes，应用模板采用 MIT 协议，CopilotKit Intelligence 则单独授权。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">12</span><span class="repo-name">Alishahryar1/free-claude-code</span><a class="repo-link" href="https://github.com/Alishahryar1/free-claude-code">https://github.com/Alishahryar1/free-claude-code</a></div><div class="repo-meta">Python ｜ ★ 68,819 ｜ ⑂ 10,717 ｜ 今日 +636</div><div class="repo-desc">多 harness 多模型的免费额度路由</div><p class="repo-sum">free-claude-code（FCC）是一个独立的开源项目，通过在本地运行代理服务，把 Claude Code、Codex、Pi、OpenCode、Cline、Aider 等 12 种编码 harness 接到 61 家受支持提供商的模型上，README 声称每月可用 1.3B+ 免费 token。它保留原生流式输出、工具调用与交错思考，提供自动重试、限流、并发控制、模型与多 API Key 回退等可靠性机制。除终端外，还可通过桌面应用、VS Code 与 JetBrains 插件、Discord 与 Telegram（支持语音）以及浏览器内的原生会话使用，项目以 Python 编写。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">13</span><span class="repo-name">ggml-org/llama.cpp</span><a class="repo-link" href="https://github.com/ggml-org/llama.cpp">https://github.com/ggml-org/llama.cpp</a></div><div class="repo-meta">C++ ｜ ★ 134,219 ｜ ⑂ 25,464 ｜ 今日 +162</div><div class="repo-desc">C/C++ 高性能本地 LLM 推理</div><p class="repo-sum">llama.cpp 是 ggml 组织维护的 C/C++ 大模型推理项目，目标是在尽量少的配置下，让 LLM 与视觉语言模型在从本地到云端的多种硬件上高效运行。它不依赖额外库，针对 Apple Silicon 做了 NEON、Accelerate 与 Metal 优化，支持 x86 的 AVX/AVX2/AVX512/AMX、RISC-V 向量扩展以及 1.5 至 8 位整数量化，并可通过 CPU+GPU 混合推理加载超出显存的模型。后端覆盖 CUDA、HIP、MUSA、Vulkan、SYCL、WebGPU 等，附带 llama cli 与兼容 OpenAI 接口的 llama serve。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">14</span><span class="repo-name">openai/whisper</span><a class="repo-link" href="https://github.com/openai/whisper">https://github.com/openai/whisper</a></div><div class="repo-meta">Python ｜ ★ 112,548 ｜ ⑂ 13,645 ｜ 今日 +118</div><div class="repo-desc">OpenAI 多语种语音识别模型</div><p class="repo-sum">Whisper 是 OpenAI 发布的通用语音识别模型，基于大量多样音频训练，用单个 Transformer 序列到序列模型同时完成多语种语音识别、语音翻译、语种识别与语音活动检测。它把这些任务统一表示为带特殊标记的 token 序列，从而替代传统语音流水线中的多个阶段。代码基于 Python 与 PyTorch，可通过 pip 安装 openai-whisper 并使用命令行工具，运行前需要系统安装 ffmpeg，适合研究者和需要转写、翻译音频的开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">16</span><span class="repo-name">fastapi/fastapi</span><a class="repo-link" href="https://github.com/fastapi/fastapi">https://github.com/fastapi/fastapi</a></div><div class="repo-meta">Python ｜ ★ 104,653 ｜ ⑂ 10,237 ｜ 今日 +86</div><div class="repo-desc">高性能 Python API 框架</div><p class="repo-sum">FastAPI 是面向 Python 的现代 Web 框架，基于标准 Python 类型提示构建 API，底层依托 Starlette 与 Pydantic，官方称性能可与 NodeJS、Go 比肩。它强调开发效率与少出错：类型声明可同时带来编辑器补全、参数校验和自动生成的交互式文档，并完全兼容 OpenAPI 与 JSON Schema 标准。框架适合需要快速构建生产级 HTTP 接口的后端开发者，README 还列出官方文档、源码仓库与赞助商信息。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
