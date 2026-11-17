@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-11-17</div>
+    <div class="sub">智能体技能与插件集中上榜，小模型训练与安全测试同样热门</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">智能体技能与插件集中上榜，小模型训练与安全测试同样热门</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>智能体交付形态转向技能包与插件市场，装一次即可跨 harness 复用</li><li>Google 开源 PaperOrchestra，多智能体把实验日志写成 LaTeX 投稿稿</li><li>miniMind 主打极低门槛：约 3 元成本、单卡两小时训练 64M 小模型</li><li>Strix 用 AI 代理动态验证漏洞并生成补丁，安全测试进入 CI 流程</li><li>Python 占半数席位，语音智能体与 Docker 管理面板补上落地一环</li></ul>
+<p class="overview">今日榜单几乎被 AI 智能体生态占据：从跨平台检索技能、Cursor 插件集到跨 harness 的工程化方法论，交付形态正从单个库转向可安装的技能与插件包。语言分布上 Python 占五席，JavaScript/TypeScript 两席，Go 与 Shell 各一，覆盖小模型训练、论文自动化、渗透测试与语音智能体等落地场景。传统前端与基础设施项目 Svelte、Arcane 同日上榜，说明工具链基本盘依旧稳固。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">2</span><span class="repo-name">mvanhorn/last30days-skill</span><a class="repo-link" href="https://github.com/mvanhorn/last30days-skill">https://github.com/mvanhorn/last30days-skill</a></div><div class="repo-meta">Python ｜ ★ 68,642 ｜ ⑂ 6,112 ｜ 今日 +772</div><div class="repo-desc">跨平台热度检索的 AI 技能</div><p class="repo-sum">面向 AI 编程助手的研究型技能，可就某个话题或人物并行检索 Reddit、X、YouTube、Hacker News、Polymarket、GitHub 等平台最近 30 天的内容，按点赞、互动和真实资金下注等信号排序，再由智能体综合成一份有出处的简报。以 Python 编写，Reddit、HN、Polymarket 与 GitHub 开箱即用，首次运行后可通过向导解锁 X、YouTube、TikTok、arXiv、Techmeme 等来源。支持 Claude Code 插件市场、npx skills 等 50 多个 Agent Skills 宿主安装，适合会前调研和行业跟踪。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">6</span><span class="repo-name">getarcaneapp/arcane</span><a class="repo-link" href="https://github.com/getarcaneapp/arcane">https://github.com/getarcaneapp/arcane</a></div><div class="repo-meta">Go ｜ ★ 9,095 ｜ ⑂ 484 ｜ 今日 +654</div><div class="repo-desc">面向所有人的现代 Docker 管理面板</div><p class="repo-sum">用 Go 编写的 Docker 管理平台，提供现代化的 Web 界面，让普通用户也能方便地管理容器等资源。main 分支已进入 v3 版本，旧版 2.x 保留在独立的 release 分支上。项目采用 BSD-3-Clause 协议开源，提供官方文档站与软件物料清单（SBOM），并在 Crowdin 上接收多语言翻译；功能请求已迁移到 Discussions，issue 只用于缺陷报告。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">8</span><span class="repo-name">cursor/plugins</span><a class="repo-link" href="https://github.com/cursor/plugins">https://github.com/cursor/plugins</a></div><div class="repo-meta">TypeScript ｜ ★ 16,764 ｜ ⑂ 1,804 ｜ 今日 +196</div><div class="repo-desc">Cursor 官方插件规范与插件集</div><p class="repo-sum">Cursor 官方插件仓库，存放插件规范以及一批面向主流开发工具、框架和 SaaS 产品的官方插件。每个插件是仓库根目录下的独立文件夹，自带 .cursor-plugin/plugin.json 清单，内容涵盖教学与学习、代码审查、并行任务编排、命令行设计、语音能力，以及 Gmail、Google Drive、Google Calendar、GitHub、Salesforce、HubSpot、Playwright、X 等第三方集成。以 TypeScript 为主，适合希望在 Cursor 智能体中接入外部服务或复用现成工作流的开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">9</span><span class="repo-name">obra/superpowers</span><a class="repo-link" href="https://github.com/obra/superpowers">https://github.com/obra/superpowers</a></div><div class="repo-meta">Shell ｜ ★ 319,028 ｜ ⑂ 28,443 ｜ 今日 +1,905</div><div class="repo-desc">给编程智能体的完整开发方法论</div><p class="repo-sum">一套建立在可组合技能之上的软件开发方法论，让编程助手在动手写代码前先弄清真实目标、分块确认设计，再给出足够具体的实现计划，并以子代理驱动开发、真正的红绿 TDD、YAGNI 与 DRY 推进任务。技能会自动触发，用户无需额外操作；安装方式覆盖 Claude Code、Codex、Cursor、Gemini CLI、GitHub Copilot CLI、OpenCode、Pi、Qwen Code 等十余种 harness。仓库以 Shell 组织技能与安装脚本，另提供商业支持渠道。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">12</span><span class="repo-name">sveltejs/svelte</span><a class="repo-link" href="https://github.com/sveltejs/svelte">https://github.com/sveltejs/svelte</a></div><div class="repo-meta">JavaScript ｜ ★ 89,338 ｜ ⑂ 6,187 ｜ 今日 +533</div><div class="repo-desc">把组件编译成高效原生 JS 的前端框架</div><p class="repo-sum">Svelte 是一种构建 Web 应用的新方式：作为编译器，它把声明式组件转换成精简的 JavaScript，通过精准的 DOM 更新来完成渲染，而不是在运行时打包一整套框架代码。项目以 JavaScript 编写，采用 MIT 协议开源，开发工作完全由志愿者推动，可通过 Open Collective 资助其托管等开销。官网提供教程与文档，仓库也公开了路线图，适合追求更小产物与更直观响应式写法的前端开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">13</span><span class="repo-name">affaan-m/ECC</span><a class="repo-link" href="https://github.com/affaan-m/ECC">https://github.com/affaan-m/ECC</a></div><div class="repo-meta">JavaScript ｜ ★ 305,082 ｜ ⑂ 44,925 ｜ 今日 +902</div><div class="repo-desc">跨 harness 的智能体工程化系统</div><p class="repo-sum">面向编程智能体的性能优化与工程化系统，用“规划、测试、实现、审查、验证、记忆、改进”的闭环把开发流程固化下来：先规划再动手，用测试验证改动，换新上下文自查，并把重复成功经验沉淀为可复用技能。据 README 介绍，它提供 72 个 agent、327 个技能与 98 个旧命令兼容层，还包含 hooks、规则、记忆、持续学习与 AgentShield 安全能力。以 JavaScript 实现，MIT 协议开源，对 Claude Code 支持最完整，同时为 Codex、Cursor、OpenCode、Gemini、Copilot 等提供适配。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">14</span><span class="repo-name">jingyaogong/minimind</span><a class="repo-link" href="https://github.com/jingyaogong/minimind">https://github.com/jingyaogong/minimind</a></div><div class="repo-meta">Python ｜ ★ 65,711 ｜ ⑂ 8,622 ｜ 今日 +188</div><div class="repo-desc">约 3 元两小时从零训练 64M 小模型</div><p class="repo-sum">一个从零训练超小语言模型的开源教学项目，主线最小版本约 64M 参数，README 称约 3 元 GPU 租用成本、在单张 3090 上跑 2 小时 SFT 即可完成复现。模型结构、Tokenizer 与训练链路均用 PyTorch 原生实现，覆盖预训练、SFT、LoRA、DPO、PPO/GRPO/CISPO 等 RLAIF、工具调用、Agentic RL、自适应思考与蒸馏，并对齐 Qwen3 生态。项目还提供全阶段数据、OpenAI 兼容服务端与 Streamlit 聊天界面，以 Apache 2.0 协议开源，适合 LLM 入门者与个人 GPU 玩家。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">15</span><span class="repo-name">google-research/paper-orchestra</span><a class="repo-link" href="https://github.com/google-research/paper-orchestra">https://github.com/google-research/paper-orchestra</a></div><div class="repo-meta">Python ｜ ★ 2,321 ｜ ⑂ 339 ｜ 今日 +1,175</div><div class="repo-desc">多智能体自动撰写 AI 论文</div><p class="repo-sum">Google Cloud AI Research 开源的多智能体论文写作框架，可把想法、实验日志等零散素材转成可投稿的 LaTeX 稿件。流水线由大纲、文献综述、章节撰写、内容打磨与绘图等专职智能体协作完成，能自动检索并整合文献、生成图表，并套用目标会议模板。项目基于 Python 3.11，需配置 Semantic Scholar 以及 Gemini 或 OpenAI 等模型密钥，附带 Streamlit 交互演示与自动评审脚本；数据集暂未随仓库发布，README 也注明这不是 Google 官方支持的产品。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">17</span><span class="repo-name">usestrix/strix</span><a class="repo-link" href="https://github.com/usestrix/strix">https://github.com/usestrix/strix</a></div><div class="repo-meta">Python ｜ ★ 76,234 ｜ ⑂ 8,651 ｜ 今日 +325</div><div class="repo-desc">自主 AI 渗透测试代理</div><p class="repo-sum">开源的 AI 渗透测试工具，让自主智能体像真实黑客一样动态运行目标代码、发现漏洞，并用可复现的 PoC 实际验证，以减少传统静态扫描的误报。内置侦察、利用与验证工具链，支持多智能体协同、自动生成修复补丁和合规报告，也可接入 GitHub Actions 等 CI/CD，在 PR 阶段拦截不安全代码。项目以 Python 编写、Apache 2.0 协议开源，运行需要 Docker 与任一受支持厂商的 LLM 密钥，面向开发者与安全团队。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">20</span><span class="repo-name">dograh-hq/dograh</span><a class="repo-link" href="https://github.com/dograh-hq/dograh">https://github.com/dograh-hq/dograh</a></div><div class="repo-meta">Python ｜ ★ 6,171 ｜ ⑂ 1,594 ｜ 今日 +13</div><div class="repo-desc">可自托管的开源语音 AI 平台</div><p class="repo-sum">开源的语音智能体平台，定位为 Vapi 与 Retell 的自托管替代品，强调无厂商锁定与源码级可定制。它提供可视化工作流构建器（起始节点、智能体节点、全局指令、工具、转接与挂断）、浏览器内语音与文字测试、知识库、Webhook 和工具调用，支持自带 LLM、STT、TTS，也可直接用官方整套栈，并兼容 Twilio、Vonage、Telnyx 等电话接入。内置 MCP 服务器，Claude Code、Codex、Cursor 等可直接创建和修改工作流；Python 编写、BSD 2-Clause 协议，一条 Docker 命令即可本地部署。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
