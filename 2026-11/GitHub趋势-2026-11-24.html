@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-11-24</div>
+    <div class="sub">Agent 技能与内容工具霸榜，AI 编码生态持续升温</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">Agent 技能与内容工具霸榜，AI 编码生态持续升温</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>AI 编码工具的插件与技能成为主线，多个仓库以 Markdown 一次编写、多宿主复用。</li><li>榜单前十中 Python 占五席，TypeScript 两席，C、HTML、Shell 各一席。</li><li>内容生产工具受关注：AutoClip 把长视频一键切成适配多平台的短视频。</li><li>知识获取仍是刚需：Firecrawl 做抓取基建，AFFiNE 做本地优先知识库。</li><li>工程可靠性回归：OpenSRE 排查 CI 故障，Airflow 与 NGINX 稳居榜单。</li></ul>
+<p class="overview">今天的榜单几乎被 AI 编码生态承包：从图表生成、论文写作、应用商店合规到跨工具插件合集，多个项目都以 Agent Skill 或插件的形式分发，强调一次编写、多宿主安装。语言分布上 Python 占据半数，TypeScript 紧随其后，传统基础设施项目 NGINX 与 Airflow 也凭稳定需求回到视野。另一个明显方向是“把长流程自动化”：Firecrawl 提供网页知识入口，OpenSRE 处理 CI 故障，AutoClip 负责视频再加工，共同指向让 AI 接手重复劳动、人保留判断。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">6</span><span class="repo-name">firecrawl/firecrawl</span><a class="repo-link" href="https://github.com/firecrawl/firecrawl">https://github.com/firecrawl/firecrawl</a></div><div class="repo-meta">TypeScript ｜ ★ 207,908 ｜ ⑂ 10,865 ｜ 今日 +924</div><div class="repo-desc">给 AI Agent 的网页数据基建</div><p class="repo-sum">Firecrawl 是面向 AI Agent 的网页数据与知识基础设施。它把网站抓取、爬取、站点地图与搜索整理成干净的 Markdown 或结构化 JSON，既可在本地以单文件二进制运行并通过 MCP 接入主流编码工具，也提供云端服务与完整自托管部署。仓库以 TypeScript 为主，包含服务端与多语言 SDK，云端还聚合 Alexandria 的 550 多个数据源，适合需要为模型补充实时网页上下文的开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">7</span><span class="repo-name">nginx/nginx</span><a class="repo-link" href="https://github.com/nginx/nginx">https://github.com/nginx/nginx</a></div><div class="repo-meta">C ｜ ★ 33,048 ｜ ⑂ 8,395 ｜ 今日 +174</div><div class="repo-desc">官方 NGINX 源码仓库</div><p class="repo-sum">NGINX 官方开源代码仓库，是用 C 语言实现的高性能 Web 服务器、反向代理、负载均衡器、API 网关与内容缓存。它采用 master 与 worker 多进程架构，通过模块和文本指令配置扩展能力，并提供稳定版与主线版二进制以及从源码构建的完整流程。项目使用简化版两条款 BSD 许可，适合运维、后端与平台工程师。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">9</span><span class="repo-name">cathrynlavery/diagram-design</span><a class="repo-link" href="https://github.com/cathrynlavery/diagram-design">https://github.com/cathrynlavery/diagram-design</a></div><div class="repo-meta">HTML ｜ ★ 70,957 ｜ ⑂ 4,746 ｜ 今日 +620</div><div class="repo-desc">自包含 HTML+SVG 图表技能</div><p class="repo-sum">一个给 AI 编码代理使用的图表设计技能，能把自然语言需求画成单个自包含的 HTML 与 SVG 文件。它内置 52 种图表类型，支持从目标网站提取品牌配色和字体，并可导入 draw.io、Mermaid、Excalidraw、PlantUML，再导出 PNG 或 SVG。通过 npx skills 或插件市场可装进 Claude Code、Cursor、Codex、GitHub Copilot 等多种宿主，适合需要快速产出架构图、流程图和象限图的团队。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">12</span><span class="repo-name">mjmirza/app-store-compliance</span><a class="repo-link" href="https://github.com/mjmirza/app-store-compliance">https://github.com/mjmirza/app-store-compliance</a></div><div class="repo-meta">Shell ｜ ★ 4,953 ｜ ⑂ 314 ｜ 今日 +761</div><div class="repo-desc">应用商店拒审避坑手册</div><p class="repo-sum">面向 iOS 与 Android 上架的应用商店合规手册和提交前检查工具。仓库记录了 124 种常见拒审模式及对应修复、隐私清单与 Data safety 检查，并跟踪 112 个监管截止日期，涉及 EU AI Act、DSA、COPPA 和年龄相关法规。它提供 Shell 编写的 guard 脚本以及面向 AI 编码工具的 hook 与 skill，在提交前扫描项目并拦截高风险项，同时明确说明扫描不能替代人工审核、也不保证通过。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">13</span><span class="repo-name">Tracer-Cloud/opensre</span><a class="repo-link" href="https://github.com/Tracer-Cloud/opensre">https://github.com/Tracer-Cloud/opensre</a></div><div class="repo-meta">Python ｜ ★ 14,828 ｜ ⑂ 1,988 ｜ 今日 +436</div><div class="repo-desc">CI/CD 故障排查 AI 代理</div><p class="repo-sum">OpenSRE 是面向 CI/CD 可靠性的开源 AI 代理，用来调查失败的流水线并给出可审查的修复。它会读取日志、验证假设，区分 CI 自身问题与代码问题，并统计失败率、开发者耗时和 main 分支保持红色的时长。项目以 Python 编写，提供交互式终端、无头 CLI 和进程内 Python API，可自托管并使用自有模型，也能接入 EKS、CloudWatch、Kubernetes、Grafana、Datadog、Slack 等排查生产事故，目前处于公开 alpha 阶段。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">14</span><span class="repo-name">toeverything/AFFiNE</span><a class="repo-link" href="https://github.com/toeverything/AFFiNE">https://github.com/toeverything/AFFiNE</a></div><div class="repo-meta">TypeScript ｜ ★ 77,385 ｜ ⑂ 5,663 ｜ 今日 +595</div><div class="repo-desc">文档与白板合一的知识库</div><p class="repo-sum">AFFiNE 是隐私优先、本地优先的开源一体化知识库，定位为 Notion 与 Miro 的替代方案。它把文档、白板、数据库与演示融合在同一画布上，富文本、便签、网页嵌入、多视图数据库和形状都能放到无边界画布中，并提供多模态 AI 辅助写作、生成幻灯片与思维导图。项目基于 TypeScript，支持实时协作、跨平台客户端和自托管部署，适合想掌控数据并搭建团队知识空间的用户。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">16</span><span class="repo-name">zhouxiaoka/autoclip</span><a class="repo-link" href="https://github.com/zhouxiaoka/autoclip">https://github.com/zhouxiaoka/autoclip</a></div><div class="repo-meta">Python ｜ ★ 14,374 ｜ ⑂ 2,205 ｜ 今日 +907</div><div class="repo-desc">长视频一键切成短视频</div><p class="repo-sum">AutoClip 是一款开源 AI 视频剪辑桌面工具，主打“一个链接，一键出片”。它把播客、访谈、课程等长视频自动剪成短视频，并生成字幕、封面与发布文案，适配抖音、小红书、TikTok、Reels、YouTube Shorts、B 站和 YouTube。剪辑与渲染在本地完成，提供桌面端、CLI 与 MCP，需要微调时可进入编辑器；软件免费、云端模型按量计费，采用 MIT 许可。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">17</span><span class="repo-name">Imbad0202/academic-research-skills</span><a class="repo-link" href="https://github.com/Imbad0202/academic-research-skills">https://github.com/Imbad0202/academic-research-skills</a></div><div class="repo-meta">Python ｜ ★ 58,263 ｜ ⑂ 4,443 ｜ 今日 +160</div><div class="repo-desc">论文全流程研究技能包</div><p class="repo-sum">一套面向 Claude Code 的学术研究技能包，覆盖从选题、写作、评审、修改到定稿的完整论文流程。它坚持“人在环路”，在每个阶段停下等待作者确认，并提供引用定位、来源溯源和可选的论断核查，以降低编造文献与引用不实带来的风险。通过插件市场即可安装，适合希望用 AI 处理查文献、排引用等繁琐工作、同时保留学术判断的研究者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">18</span><span class="repo-name">wshobson/agents</span><a class="repo-link" href="https://github.com/wshobson/agents">https://github.com/wshobson/agents</a></div><div class="repo-meta">Python ｜ ★ 42,845 ｜ ⑂ 4,535 ｜ 今日 +47</div><div class="repo-desc">跨工具 AI 编码插件合集</div><p class="repo-sum">一个可跨多种 AI 编码工具复用的插件、代理、技能与命令合集。贡献者只需用 Markdown 按 Claude Code 插件格式写一次，仓库中的适配器与 CI 就会生成 Claude Code、Codex CLI、Cursor、OpenCode、Antigravity CLI、GitHub Copilot 和 Pi 各自可读的产物并做校验。目录包含 93 个插件、199 个代理、185 个技能和 103 条命令，覆盖 Python、JavaScript、代码审查、测试、基础设施与安全等场景。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">19</span><span class="repo-name">apache/airflow</span><a class="repo-link" href="https://github.com/apache/airflow">https://github.com/apache/airflow</a></div><div class="repo-meta">Python ｜ ★ 47,633 ｜ ⑂ 18,386 ｜ 今日 +27</div><div class="repo-desc">代码化工作流调度平台</div><p class="repo-sum">Apache Airflow 是用代码编排、调度和监控工作流的平台，也是 Python 生态中最主流的批处理调度系统之一。用户以 DAG 描述任务及其依赖，调度器按依赖关系在 worker 集群上执行，并提供命令行工具与 Web 界面用于可视化、监控和排障。项目采用 Apache 2.0 许可，适合数据工程与平台团队构建可维护、可版本化、可协作的数据管道。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
