@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>GitHub Trending 日报</title>
+<style>
+  :root{
+    --accent:#1f6feb; --ink:#111827; --body:#374151; --muted:#6b7280;
+    --line:#e7e5e4; --bg:#f7f6f4; --card:#ffffff; --thead:#f6f4f1; --chip:#f1f5f9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#f1f5f9; --body:#cbd5e1; --muted:#94a3b8;
+      --line:#2b3441; --bg:#0e131a; --card:#151c26; --thead:#1c2531; --chip:#1c2531; }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--body);
+    font:16px/1.8 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Droid Sans Fallback",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px}
+
+  .hero{background:var(--accent); color:#fff; padding:30px 0 24px; border-radius:0 0 18px 18px}
+  .hero .wrap{padding:0 20px}
+  .kick{font-size:12px; letter-spacing:.22em; text-transform:uppercase; opacity:.85}
+  .hero h1{margin:.2em 0 .12em; font-size:clamp(24px,4.8vw,36px); line-height:1.25}
+  .hero .date{font-size:13.5px; opacity:.92}
+  .hero .sub{font-size:14px; opacity:.9; margin-top:4px}
+  .stats{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:12px; font-size:13px}
+  .stats span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+    border-radius:999px; padding:3px 11px}
+
+  h2{font-size:19px; color:var(--accent); margin:30px 0 10px; padding-left:11px;
+    border-left:5px solid var(--accent); line-height:1.4}
+  h3{font-size:15.5px; color:var(--ink); margin:16px 0 6px}
+  p{margin:.55em 0}
+  a{color:var(--accent)}
+
+  .tw{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0 10px;
+    border:1px solid var(--line); border-radius:10px}
+  .tw table{margin:0; border:0}
+  table{border-collapse:collapse; width:100%; font-size:15px; background:var(--card)}
+  th,td{border-bottom:1px solid var(--line); padding:8px 11px; text-align:left}
+  th{background:var(--thead); color:var(--ink); font-weight:700; font-size:13.5px}
+  tr:last-child td{border-bottom:0}
+
+  footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.8}
+  .foot{margin:0}
+
+  @media (min-width:900px){ h2{margin-top:34px} }
+  @media print{
+    body{background:#fff; padding:0; font-size:10.5pt}
+    .hero{background:#fff; color:#000; border-radius:0; border-bottom:2px solid var(--accent); padding:0 0 8px}
+    .stats span{border:1px solid #999}
+    .tw{overflow:visible}
+    h2{break-after:avoid}
+  }
+  
+  .headline{font-size:19px;line-height:1.6;font-weight:700;color:var(--ink);
+    background:rgba(88,166,255,.10);border-left:4px solid var(--accent);border-radius:8px;
+    padding:12px 14px;margin:6px 0}
+  ul.highlights{margin:.2em 0 .8em;padding-left:1.15em}
+  ul.highlights li{margin:.35em 0}
+  .overview{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;color:var(--body);margin:10px 0 16px}
+  .repo{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:12px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+  .repo-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .repo-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45;word-break:break-all}
+  .repo-rank{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;
+    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;flex:none}
+  .repo-meta{font-size:13px;color:var(--muted);margin:5px 0 2px}
+  .repo-link{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 8px;
+    word-break:break-all;text-decoration:none}
+  .repo-desc,.repo-sum{font-size:16px;line-height:1.85;color:var(--body);margin:.3em 0}
+  .badge-warn,.badge-repeat{font-size:11.5px;border:1px solid var(--line);border-radius:999px;
+    padding:0 8px;color:var(--muted);font-weight:400}
+  .foot{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  .na{color:#b6bcc5}
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">GITHUB TRENDING · DAILY BRIEF</div>
+    <h1>GitHub Trending 日报</h1>
+    <div class="date">2026-11-27</div>
+    <div class="sub">榜单被 AI 智能体占据：从写代码到管邮箱与客户</div>
+    <div class="stats"><span>10 个项目</span><span>中文简介</span><span>README 摘要</span></div>
+  </div>
+</header>
+<main class="wrap">
+
+<div class="hdr">
+
+
+
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">一句话概括</div>
+<div class="headline">榜单被 AI 智能体占据：从写代码到管邮箱与客户</div>
+<div class="overview-label" style="font-size:16.1pt;font-weight:bold;color:#586069;margin-bottom:3px;">趋势要点</div>
+<ul class="highlights"><li>ponytail 教 AI 少写代码，Codex 插件让双代理互审</li><li>Agent-first 成共识：四大平台内置 MCP 与智能体</li><li>TypeScript 5 席、JavaScript 4 席，AI 全栈是主线</li><li>Bend 用数学证明给 AI 代码上锁，形式化验证落地</li><li>jQuery 4.0.0 发布后回榜，1.x 与 2.x 停止支持</li></ul>
+<p class="overview">今日 10 个项目全部为新上榜，主题高度集中在 AI 智能体：既有 ponytail、codex-plugin-cc 这类改造编程代理的工具，也有 Appwrite、Mastra、Twenty 这样把 MCP 与 agent 能力写进产品底座的平台。语言分布上 TypeScript 占 5 席、JavaScript 占 4 席，只有 Bend 以独立语言项目出现。另一条线索是自托管与零成本部署，EdgeEver 与 Mailflare 都强调可在 Cloudflare 或 Docker 上运行，把数据主权交回用户。</p>
+
+<h2>上榜项目简介</h2>
+</div>
+<div class="repo"><div class="repo-head"><span class="repo-rank">41</span><span class="repo-name">DietrichGebert/ponytail</span><a class="repo-link" href="https://github.com/DietrichGebert/ponytail">https://github.com/DietrichGebert/ponytail</a></div><div class="repo-meta">JavaScript ｜ ★ 199,639 ｜ ⑂ 11,344 ｜ 今日 +687</div><div class="repo-desc">让 AI 代理像资深懒程序员写码</div><p class="repo-sum">Ponytail 是一段注入 AI 编程代理的提示词技能，让代理模仿公司里那位扎马尾的资深工程师：先把改动涉及的代码和真实数据流读透，然后只写任务真正需要的那几行。作者称在 Claude Code 中用 39 项任务做对照基准，同一代理启用后代码量减少约 53%、耗时减少 41%、成本降低 26%、token 减少 45%，且 98% 的风险逻辑会留下测试。它强调懒但不失职，信任边界校验、数据丢失处理、安全和可访问性从不省略，并提供 /ponytail-review 代码审查、/ponytail-audit 全仓审计和展示任务成本的面板。项目以 JavaScript 编写，核心是一份 SKILL.md 提示词，适合 Claude Code 等代理工具的用户。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">42</span><span class="repo-name">openai/codex-plugin-cc</span><a class="repo-link" href="https://github.com/openai/codex-plugin-cc">https://github.com/openai/codex-plugin-cc</a></div><div class="repo-meta">JavaScript ｜ ★ 35,488 ｜ ⑂ 2,476 ｜ 今日 +30</div><div class="repo-desc">Claude Code 调用 Codex</div><p class="repo-sum">这是 OpenAI 为 Claude Code 提供的官方插件，让用户在熟悉的 Claude Code 工作流中直接调用 Codex 做代码审查或委派任务。它提供只读的 /codex:review 常规审查、可附加焦点文本的 /codex:adversarial-review 对抗式审查，以及 rescue、transfer、status、result、cancel 等命令，用于交接会话和管理后台作业。使用需要 ChatGPT 订阅（含免费版）或 OpenAI API key，并依赖 Node.js 18.18 及以上版本，可通过插件市场几条命令完成安装。它适合已经在用 Claude Code、又希望引入第二套代理做交叉验证的开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">43</span><span class="repo-name">HaD0Yun/CozyClay</span><a class="repo-link" href="https://github.com/HaD0Yun/CozyClay">https://github.com/HaD0Yun/CozyClay</a></div><div class="repo-meta">JavaScript ｜ ★ 2,085 ｜ ⑂ 224 ｜ 今日 +42</div><div class="repo-desc">浏览器里的开源三维预演工具</div><p class="repo-sum">CozyClay 是一款运行在浏览器中的开源 previs 预演软件，先在三维空间里搭好场景、摆好角色、设计运镜与剪辑，再把镜头交给 AI 视频模型生成。它针对 AI 视频按条计费、纯文本提示难以控制站位与机位的痛点，导出首帧、灰盒参考片段和描述真实构图的提示词，让模型跟随预演而不是靠猜。项目用 npx cozyclay 一条命令启动，需要 Node.js 22.19 以上和 Chromium 浏览器，无需 GPU、Python 或下载模型，并支持在 Agent 面板中用自然语言驱动动作与镜头。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">44</span><span class="repo-name">jquery/jquery</span><a class="repo-link" href="https://github.com/jquery/jquery">https://github.com/jquery/jquery</a></div><div class="repo-meta">JavaScript ｜ ★ 60,194 ｜ ⑂ 20,635 ｜ 今日 +22</div><div class="repo-desc">统治 Web 多年的经典 JS 库</div><p class="repo-sum">jQuery 是历史最悠久、使用最广的 JavaScript 库之一，以简洁的 API 统一处理 DOM 操作、事件、动画与 Ajax，并兼容浏览器、Node 以及扩展等非浏览器环境。README 显示 jQuery 4.0.0 已发布，4.x 作为主分支获得完整支持，3.x 仅接收关键修复，2.x 与 1.x 已停止维护，官方建议所有用户升级。项目使用 Node.js 与 npm 构建，仓库同时提供贡献指南、核心代码风格规范，以及面向旧版本的商业支持渠道。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">45</span><span class="repo-name">bendlang/bend</span><a class="repo-link" href="https://github.com/bendlang/bend">https://github.com/bendlang/bend</a></div><div class="repo-meta">TypeScript ｜ ★ 25,958 ｜ ⑂ 827 ｜ 今日 +40</div><div class="repo-desc">用数学证明约束 AI 改码的语言</div><p class="repo-sum">Bend 是一门面向后 AGI 场景的新语言，目标是在人类不再逐行读写代码时，仍能用无歧义的方式向 AI 表达意图并验证结果。它的核心机制是 LAWS.bend：开发者以 law 形式写下应用不可违反的规则，编译器要求每次改动都给出数学证明，从而在编译期阻止 AI 引入违规代码，相当于带证明的 AGENTS.md。据 README 描述，Bend 编译出的单核程序速度可对标手写 C，能把任务自动分摊到数千个核心乃至整块 GPU 上运行，并可在不到一秒内校验其他证明助手需要数分钟的文件。项目主要用 TypeScript 实现，提供一键安装脚本，适合关注形式化验证与高性能并行计算的开发者。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">46</span><span class="repo-name">appwrite/appwrite</span><a class="repo-link" href="https://github.com/appwrite/appwrite">https://github.com/appwrite/appwrite</a></div><div class="repo-meta">TypeScript ｜ ★ 58,691 ｜ ⑂ 5,919 ｜ 今日 +38</div><div class="repo-desc">面向智能体的开源后端云平台</div><p class="repo-sum">Appwrite 是一个开源的云平台，把认证、数据库、存储、函数计算、站点托管、消息推送、实时订阅与防火墙等后端能力整合到统一的产品体系中。它主打 agent-first：内置托管 MCP 服务器，Cursor、Claude Code、Codex 等编码代理可直接操作线上 Appwrite 项目，开发者也可以改用各语言 SDK 集成。平台既提供带免费额度的托管云，也支持在任意能运行 Docker 的环境中自托管，便于从原型平滑扩展到生产规模。项目用 TypeScript 开发，适合需要一站式后端与代理协作能力的团队。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">47</span><span class="repo-name">mastra-ai/mastra</span><a class="repo-link" href="https://github.com/mastra-ai/mastra">https://github.com/mastra-ai/mastra</a></div><div class="repo-meta">TypeScript ｜ ★ 29,855 ｜ ⑂ 3,148 ｜ 今日 +20</div><div class="repo-desc">TypeScript AI 应用框架</div><p class="repo-sum">Mastra 是一个用现代 TypeScript 技术栈构建 AI 应用与智能体的框架，覆盖从早期原型到生产部署的完整链路。它提供统一接入 40 多家模型供应商的模型路由、可自主调用工具并迭代推理的 Agent、基于图的 Workflow 编排（then、branch、parallel），以及挂起等待人工审批的人机协同机制。框架还包含对话历史与 RAG 检索、Observational Memory 记忆、内置评估与可观测性，并支持把智能体以 MCP 服务器形式暴露给其他系统。开发者可用 npm create mastra 快速起步，并把能力嵌入 React、Next.js、Node 应用或作为独立服务部署。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">48</span><span class="repo-name">tianma-if/edgeever</span><a class="repo-link" href="https://github.com/tianma-if/edgeever">https://github.com/tianma-if/edgeever</a></div><div class="repo-meta">TypeScript ｜ ★ 3,632 ｜ ⑂ 1,878 ｜ 今日 +31</div><div class="repo-desc">可自托管的 AI 原生笔记知识库</div><p class="repo-sum">EdgeEver 是一款开源的笔记与知识库工作区，定位为 Evernote 与 Obsidian 的替代方案，同时保留经典三栏式（目录树、笔记列表、编辑器）的高效工作流。它强调开放数据架构与 AI Agent 集成，支持表格、思维导图、图表、海报等富文本内容，并提供网页剪藏和 MCP 接口，方便把个人知识库接入智能体。部署上可完全运行在 Cloudflare 免费额度内，无需自购服务器，也可用 Docker 部署到 VPS、NAS 或家用服务器，实现数据自主可控。项目主要使用 TypeScript，适合追求零成本同步与私有化部署的用户。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">49</span><span class="repo-name">twentyhq/twenty</span><a class="repo-link" href="https://github.com/twentyhq/twenty">https://github.com/twentyhq/twenty</a></div><div class="repo-meta">TypeScript ｜ ★ 61,539 ｜ ⑂ 10,207 ｜ 今日 +45</div><div class="repo-desc">可像代码一样版本化的开源 CRM</div><p class="repo-sum">Twenty 是 Salesforce 的开源替代品，面向技术团队提供可自行搭建、发布和版本管理的 CRM 底座。它把对象、字段、视图、工作流与智能体都抽象为可用代码定义的原语，开发者通过 Twenty CLI 初始化应用、声明数据模型并发布到工作区，还能配合官方 agent skills 在 Claude Code、Codex、Cursor 等工具中协作开发。产品支持云托管快速开通，也可用 Docker Compose 自托管，仓库随附文档、路线图与贡献指南。项目以 TypeScript 为主，适合需要深度定制客户关系管理的工程团队。</p></div><div class="repo"><div class="repo-head"><span class="repo-rank">50</span><span class="repo-name">hieunc229/mailflare</span><a class="repo-link" href="https://github.com/hieunc229/mailflare">https://github.com/hieunc229/mailflare</a></div><div class="repo-meta">TypeScript ｜ ★ 7,767 ｜ ⑂ 1,390 ｜ 今日 +84</div><div class="repo-desc">自托管办公套件替代品</div><p class="repo-sum">Mailflare 是一套可自托管的 Google Workspace 替代方案，把自定义域名邮箱、日历、网盘、预约与内置 AI 智能体集成在一个应用里。邮件可通过 Cloudflare Email、Resend 或 Amazon SES 收发，并支持存储、转发、拒绝、分类等路由规则；智能体能搜索邮件、起草回复、管理日程，并可通过 MCP 连接其他 AI 工具。技术上支持 Cloudflare D1、PostgreSQL、MySQL、Turso 与 SQLite 多种数据库，文件可存放于 R2、B2 或 S3，部署可选 Cloudflare Workers、单个 Docker 容器或实验性的 Vercel。它还提供用户、API key、Webhook、审计日志与备份等管理功能，界面支持 34 种语言，并可从 IMAP 或 Google Takeout 导入历史数据。</p></div>
+
+<div class="foot">共 10 个上榜项目，取到 README 10 个。<br>
+本日报由 Ember 自动生成，简介由 AI 依据各项目 README 概括，仅供参考。</div>
+
+</main>
+</body>
+</html>
